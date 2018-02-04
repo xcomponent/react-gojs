@@ -1,0 +1,79 @@
+{
+  "name": "react-gojs",
+  "version": "1.0.0",
+  "description": "GoJS React integration",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "node scripts/clean.js && tsc",
+    "watch": "node scripts/clean.js && tsc -w",
+    "test": "node scripts/test.js --env=jsdom",
+    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xcomponent/react-gojs.git"
+  },
+  "keywords": [
+    "gojs",
+    "react"
+  ],
+  "author": "XComponent <dev@xcomponent.com> (http://www.xcomponent.com)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/xcomponent/react-gojs/issues"
+  },
+  "homepage": "https://github.com/xcomponent/react-gojs#readme",
+  "devDependencies": {
+    "@types/enzyme": "^3.1.8",
+    "@types/jest": "^22.1.1",
+    "@types/node": "^9.3.0",
+    "@types/react": "^16.0.34",
+    "@types/react-dom": "^16.0.3",
+    "canvas-prebuilt": "^1.6.5-prerelease.1",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "jest": "^22.1.4",
+    "ts-jest": "^22.0.2",
+    "tslint": "^5.9.1",
+    "tslint-react": "^3.4.0",
+    "typescript": "^2.6.2"
+  },
+  "dependencies": {
+    "gojs": "^1.8.11",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/config/jest/setup.js",
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/?(*.)(test).ts?(x)"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/config/jest/typescriptTransform.js",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|ts|tsx)$"
+    ],
+    "moduleFileExtensions": [
+      "mjs",
+      "web.ts",
+      "ts",
+      "web.tsx",
+      "tsx",
+      "web.js",
+      "js",
+      "web.jsx",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}

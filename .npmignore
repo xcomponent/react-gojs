@@ -1,0 +1,7 @@
+tsconfig.json
+src
+config
+scripts
+tslint.json
+.travis.yml
+*.tgz
