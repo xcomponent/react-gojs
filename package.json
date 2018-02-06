@@ -1,6 +1,6 @@
 {
   "name": "react-gojs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GoJS React integration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -45,7 +45,6 @@
     "gojs": "^1.8.11"
   },
   "peerDependencies": {
-    "gojs": "1.8.x",
     "react": "16.x",
     "react-dom": "16.x"
   },
