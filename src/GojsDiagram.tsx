@@ -36,7 +36,7 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
     componentDidUpdate() {
         this.myDiagram.startTransaction();
         this.applyAddRemoveLinksFromModel();
-        this.applyAddRemoveNodesFromModel();        
+        this.applyAddRemoveNodesFromModel();
         this.applyUpdatesFromModel();
         this.myDiagram.updateAllRelationshipsFromData();
         this.myDiagram.updateAllTargetBindings();
@@ -57,7 +57,8 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
 
     private applyAddRemoveNodesFromModel() {
         const nodesToAdd = this.props.model.nodeDataArray.filter(e =>
-            this.myDiagram.model.nodeDataArray.findIndex((el: BaseNodeModel) => el.key === e.key) === -1);
+            this.myDiagram.model.nodeDataArray.findIndex((el: BaseNodeModel) => el.key === e.key) === -1)
+            .map(node => Object.assign({}, node));
         this.myDiagram.model.addNodeDataCollection(nodesToAdd);
         const nodesToRemove = this.myDiagram.model.nodeDataArray.filter((e: BaseNodeModel) =>
             this.props.model.nodeDataArray.findIndex(el =>
@@ -68,7 +69,8 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
     private applyAddRemoveLinksFromModel() {
         const linksToAdd = this.props.model.linkDataArray.filter(e =>
             (this.myDiagram.model as GojsModel).linkDataArray.findIndex((el: LinkModel) =>
-                el.from === e.from && el.to === e.to) === -1);
+                el.from === e.from && el.to === e.to) === -1)
+            .map(link => Object.assign({}, link));
         (this.myDiagram.model as GojsModel).addLinkDataCollection(linksToAdd);
         const linksToRemove = (this.myDiagram.model as GojsModel).linkDataArray.filter((e: LinkModel) =>
             this.props.model.linkDataArray.findIndex(el =>
