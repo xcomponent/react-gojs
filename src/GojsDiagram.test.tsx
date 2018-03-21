@@ -2,7 +2,9 @@ import * as React from 'react';
 import * as go from 'gojs';
 import { Diagram } from 'gojs';
 import { mount } from 'enzyme';
-import GojsDiagram from './GojsDiagram';
+import GojsDiagram, { GojsModel } from './GojsDiagram';
+import { ModelChangeEvent, ModelChangeEventType } from './modelChangeEvent';
+import { LinkModel, BaseNodeModel } from './model';
 
 describe('<GojsDiagram />', () => {
 
@@ -55,9 +57,11 @@ describe('<GojsDiagram />', () => {
 
     let diagram: Diagram;
     let wrapper;
+    let modelChangeCallback;
 
     beforeEach(() => {
         const dom = document.body;
+        modelChangeCallback = jest.fn();
         wrapper = mount(
             (
                 <GojsDiagram
@@ -69,6 +73,7 @@ describe('<GojsDiagram />', () => {
                     }
                     }
                     className="fakecss"
+                    onModelChange={modelChangeCallback}
                 />
             ),
             { attachTo: dom });
@@ -144,6 +149,81 @@ describe('<GojsDiagram />', () => {
         wrapper.unmount();
         expect(diagram.nodes.count).toBe(0);
         expect(diagram.links.count).toBe(0);
+    });
+
+    it('should trigger a model changed event when a node is added', () => {
+        checkIfDiagramRendersModel(model, diagram);
+
+        const newNode = { key: 'newNode', color: 'blue' };
+        diagram.startTransaction();
+        diagram.model.addNodeData(newNode);
+        diagram.commitTransaction();
+
+        expect(modelChangeCallback.mock.calls.length).toBe(1);
+        const changeEvent = modelChangeCallback.mock.calls[0][0];
+        expect(changeEvent.eventType).toBe(ModelChangeEventType.Add);
+        expect(changeEvent.nodeData.key).toBe(newNode.key);
+        expect(changeEvent.nodeData.color).toBe(newNode.color);
+        expect(changeEvent.linkData).toBeUndefined();
+    });
+
+    it('should trigger a model changed event when a link is added', () => {
+        checkIfDiagramRendersModel(model, diagram);
+
+        const newLink = { from: 'Alpha', to: 'Omega' };
+        diagram.startTransaction();
+        (diagram.model as GojsModel).addLinkData(newLink);
+        diagram.commitTransaction();
+
+        expect(modelChangeCallback.mock.calls.length).toBe(1);
+        const changeEvent = modelChangeCallback.mock.calls[0][0];
+        expect(changeEvent.eventType).toBe(ModelChangeEventType.Add);
+        expect(changeEvent.linkData.from).toBe(newLink.from);
+        expect(changeEvent.linkData.to).toBe(newLink.to);
+        expect(changeEvent.nodeData).toBeUndefined();
+    });
+
+    it('should trigger model changed events when a node is removed', () => {
+        checkIfDiagramRendersModel(model, diagram);
+
+        const nodeToRemoveName = 'Delta';
+        const nodeToRemove = diagram.nodes.filter(node => node.key === nodeToRemoveName).first();
+        diagram.startTransaction();
+        diagram.remove(nodeToRemove);
+        diagram.commitTransaction();
+
+        // 2 times: 1 removed node and 1 removed link (because the removed node was linked to another node)
+        expect(modelChangeCallback.mock.calls.length).toBe(2);
+        const removeLinkChangeEvent = modelChangeCallback.mock.calls[0][0];
+        expect(removeLinkChangeEvent.eventType).toBe(ModelChangeEventType.Remove);
+        expect(removeLinkChangeEvent.linkData.from).toBe('Beta');
+        expect(removeLinkChangeEvent.linkData.to).toBe(nodeToRemoveName);
+        expect(removeLinkChangeEvent.nodeData).toBeUndefined();
+
+        const removeNodeChangeEvent = modelChangeCallback.mock.calls[1][0];
+        expect(removeNodeChangeEvent.eventType).toBe(ModelChangeEventType.Remove);
+        expect(removeNodeChangeEvent.nodeData.key).toBe(nodeToRemoveName);
+        expect(removeNodeChangeEvent.nodeData.color).toBe('pink');
+        expect(removeNodeChangeEvent.linkData).toBeUndefined();
+    });
+
+    it('should trigger a model changed event when a link is removed', () => {
+        checkIfDiagramRendersModel(model, diagram);
+
+        const linkFrom = 'Gamma';
+        const linkTo = 'Omega';
+        const linkToRemove = diagram.links.filter(link =>
+            link.fromNode.key === linkFrom && link.toNode.key === linkTo).first();
+        diagram.startTransaction();
+        diagram.remove(linkToRemove);
+        diagram.commitTransaction();
+
+        expect(modelChangeCallback.mock.calls.length).toBe(1);
+        const removeLinkChangeEvent = modelChangeCallback.mock.calls[0][0];
+        expect(removeLinkChangeEvent.eventType).toBe(ModelChangeEventType.Remove);
+        expect(removeLinkChangeEvent.linkData.from).toBe(linkFrom);
+        expect(removeLinkChangeEvent.linkData.to).toBe(linkTo);
+        expect(removeLinkChangeEvent.nodeData).toBeUndefined();
     });
 });
 

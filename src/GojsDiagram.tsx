@@ -1,28 +1,45 @@
 import * as React from 'react';
 import * as go from 'gojs';
-import { Diagram } from 'gojs';
+import { Diagram, ChangedEvent } from 'gojs';
 import { DiagramModel, BaseNodeModel, LinkModel } from './model';
+import { ModelChangeEvent } from './modelChangeEvent';
+import {
+    AddNodeModelChangedHandler,
+    AddLinkModelChangedHandler,
+    RemoveNodeModelChangedHandler,
+    RemoveLinkModelChangedHandler
+} from './modelChangedhandler';
 
 export interface GojsDiagramProps<N extends BaseNodeModel, L extends LinkModel> {
     model: DiagramModel<N, L>;
     createDiagram: (id: string) => Diagram;
     diagramId: string;
     className: string;
+    onModelChange?: (event: ModelChangeEvent<N, L>) => void;
 
 }
 
-interface GojsModel extends go.Model {
+export interface GojsModel extends go.Model {
     linkDataArray: Object[];
     addLinkDataCollection: (links: Object[]) => void;
     removeLinkDataCollection: (links: Object[]) => void;
+    addLinkData: (link: Object) => void;
+    removeLinkData: (link: Object) => void;
 }
 
 class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.PureComponent<GojsDiagramProps<N, L>> {
 
     private myDiagram: Diagram;
+    private modelChangedHandlers = [
+        new AddNodeModelChangedHandler<N, L>(),
+        new AddLinkModelChangedHandler<N, L>(),
+        new RemoveNodeModelChangedHandler<N, L>(),
+        new RemoveLinkModelChangedHandler<N, L>()
+    ];
 
     constructor(props: GojsDiagramProps<N, L>) {
         super(props);
+        this.modelChangedHandler = this.modelChangedHandler.bind(this);
     }
 
     componentDidMount() {
@@ -30,6 +47,9 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
     }
 
     componentWillUnmount() {
+        if (this.props.onModelChange) {
+            this.myDiagram.removeModelChangedListener(this.modelChangedHandler);
+        }
         this.myDiagram.clear();
     }
 
@@ -43,8 +63,11 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
         this.myDiagram.commitTransaction('updated');
     }
     init() {
-        const { createDiagram, diagramId } = this.props;
+        const { createDiagram, diagramId, onModelChange } = this.props;
         this.myDiagram = createDiagram(diagramId);
+        if (onModelChange) {
+            this.myDiagram.addModelChangedListener(this.modelChangedHandler);
+        }
         this.myDiagram.model = new go.GraphLinksModel(
             [...this.props.model.nodeDataArray],
             [...this.props.model.linkDataArray]);
@@ -53,6 +76,14 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
         return (
             <div id={this.props.diagramId} className={this.props.className} />
         );
+    }
+
+    private modelChangedHandler(evt: ChangedEvent) {
+        this.modelChangedHandlers.forEach(handler => {
+            if (handler.canHandle(evt)) {
+                handler.handle(evt, this.props.model, this.props.onModelChange!);
+            }
+        });
     }
 
     private applyAddRemoveNodesFromModel() {
