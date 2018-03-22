@@ -34,6 +34,7 @@ To create a GoJS diagram, just use the *GojsDiagram* React component:
     model={this.props.model}
     createDiagram={this.createDiagram}
     className="myDiagram"
+    onModelChange={this.modelChangedhandler}
 />
 ```
 
@@ -107,6 +108,10 @@ Example:
     height: 400px;
 }
 ```
+
+- onModelChange: the *onModelChange* event occurs when the diagram model has changed (add/remove nodes/links from the UI). This event is very useful to keep your model (provided as prop) in sync with the diagram. 
+
+For example, in a Redux environment, the diagram model should be immutable (and stored in the redux store). The *onModelChange* handler can dispatch actions to update the model.
 
 ## Example
 
