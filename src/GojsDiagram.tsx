@@ -16,6 +16,8 @@ export interface GojsDiagramProps<N extends BaseNodeModel, L extends LinkModel> 
     diagramId: string;
     className: string;
     onModelChange?: (event: ModelChangeEvent<N, L>) => void;
+    linkFromPortIdProperty?: string;
+    linkToPortIdProperty?: string;
 
 }
 
@@ -68,9 +70,14 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
         if (onModelChange) {
             this.myDiagram.addModelChangedListener(this.modelChangedHandler);
         }
-        this.myDiagram.model = new go.GraphLinksModel(
-            [...this.props.model.nodeDataArray],
-            [...this.props.model.linkDataArray]);
+        this.myDiagram.model = go.GraphObject.make(
+            go.GraphLinksModel,
+            {
+                linkFromPortIdProperty: this.props.linkFromPortIdProperty || '',
+                linkToPortIdProperty: this.props.linkToPortIdProperty || '',
+                nodeDataArray: [...this.props.model.nodeDataArray],
+                linkDataArray: [...this.props.model.linkDataArray]
+            });
     }
     render() {
         return (
@@ -115,6 +122,8 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
             incremental: 1,
             nodeKeyProperty: 'key',
             linkKeyProperty: 'key',
+            linkFromPortIdProperty: this.props.linkFromPortIdProperty || '',
+            linkToPortIdProperty: this.props.linkToPortIdProperty || '',
             modifiedNodeData: this.props.model.nodeDataArray,
             modifiedLinkData: this.props.model.linkDataArray,
         });
