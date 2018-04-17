@@ -7,7 +7,8 @@ import { ModelChangeEvent, ModelChangeEventType } from './modelChangeEvent';
 import { LinkModel, BaseNodeModel } from './model';
 
 describe('<GojsDiagram />', () => {
-
+    const portFrom = 'R';
+    const portTo = 'L';
     const model = {
         nodeDataArray: [
             { key: 'Alpha', color: 'lightblue' },
@@ -18,10 +19,10 @@ describe('<GojsDiagram />', () => {
         ],
         linkDataArray:
             [
-                { from: 'Alpha', to: 'Beta' },
-                { from: 'Alpha', to: 'Gamma' },
-                { from: 'Beta', to: 'Delta' },
-                { from: 'Gamma', to: 'Omega' }
+                { from: 'Alpha', to: 'Beta', 'fromPort': portFrom, 'toPort': portTo },
+                { from: 'Alpha', to: 'Gamma', 'fromPort': portFrom, 'toPort': portTo },
+                { from: 'Beta', to: 'Delta', 'fromPort': portFrom, 'toPort': portTo },
+                { from: 'Gamma', to: 'Omega', 'fromPort': portFrom, 'toPort': portTo }
             ]
     };
 
@@ -47,10 +48,28 @@ describe('<GojsDiagram />', () => {
                 $(
                     go.TextBlock,
                     { margin: 8 },
-                    new go.Binding('text', 'key'))
+                    new go.Binding('text', 'key')),
+                makePort(portTo, go.Spot.LeftCenter, false, true),
+                makePort(portFrom, go.Spot.RightCenter, true, false)
             );
 
         return myDiagram;
+    };
+
+    const makePort = (name: string, spot: go.Spot, isOutput: boolean, isInput: boolean) => {
+        const $ = go.GraphObject.make;
+        return $(
+            go.Shape, 'Circle',
+            {
+                fill: 'black',
+                desiredSize: new go.Size(8, 8),
+                alignment: spot, alignmentFocus: spot,
+                fromSpot: spot, toSpot: spot,
+                portId: name,
+                fromLinkable: isOutput, toLinkable: isInput,
+                fromLinkableDuplicates: false, toLinkableDuplicates: false,
+                cursor: 'pointer',
+            });
     };
 
     const myDiagramId = 'myDiagramId';
@@ -74,6 +93,8 @@ describe('<GojsDiagram />', () => {
                     }
                     className="fakecss"
                     onModelChange={modelChangeCallback}
+                    linkFromPortIdProperty={portFrom}
+                    linkToPortIdProperty={portTo}
                 />
             ),
             { attachTo: dom });
@@ -103,8 +124,8 @@ describe('<GojsDiagram />', () => {
                 ],
                 linkDataArray:
                     [
-                        { from: 'Alpha', to: 'Beta' },
-                        { from: 'Alpha', to: 'Gamma' }
+                        { from: 'Alpha', to: 'Beta', 'fromPort': portFrom, 'toPort': portTo },
+                        { from: 'Alpha', to: 'Gamma', 'fromPort': portFrom, 'toPort': portTo }
                     ]
             },
             description: 'removing nodes and links'
@@ -115,7 +136,7 @@ describe('<GojsDiagram />', () => {
                 linkDataArray:
                     [
                         ...model.linkDataArray,
-                        { from: 'Alpha', to: 'Omega' }
+                        { from: 'Alpha', to: 'Omega', 'fromPort': portFrom, 'toPort': portTo }
                     ]
             },
             description: 'adding a new link'
