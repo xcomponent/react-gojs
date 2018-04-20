@@ -241,7 +241,7 @@ describe('<GojsDiagram />', () => {
         diagram.remove(nodeToRemove);
         diagram.commitTransaction();
 
-        // 2 times: 1 removed node and 1 removed link (because the removed node was linked to another node) 
+        // 2 times: 1 removed node and 1 removed link (because the removed node was linked to another node)
         expect(modelChangeCallback.mock.calls.length).toBe(2);
         const removeLinkChangeEvent = modelChangeCallback.mock.calls[0][0];
         expect(removeLinkChangeEvent.eventType).toBe(ModelChangeEventType.Remove);

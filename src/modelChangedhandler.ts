@@ -24,8 +24,6 @@ export class AddNodeModelChangedHandler<N extends BaseNodeModel, L extends LinkM
     handle(evt: ChangedEvent, model: DiagramModel<N, L>, onModelChange: (event: ModelChangeEvent<N, L>) => void) {
         if (!model.nodeDataArray
             .some((el: BaseNodeModel) => el.key === evt.newValue.key)) {
-            console.error(model);
-            console.error(evt.model);
             onModelChange!({
                 eventType: ModelChangeEventType.Add,
                 nodeData: { ...evt.newValue },
