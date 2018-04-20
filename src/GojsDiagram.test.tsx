@@ -6,16 +6,21 @@ import GojsDiagram, { GojsModel } from './GojsDiagram';
 import { ModelChangeEvent, ModelChangeEventType } from './modelChangeEvent';
 import { LinkModel, BaseNodeModel } from './model';
 
+const groupName = 'myGroup';
+const singleNode = 'singleNode';
+
 describe('<GojsDiagram />', () => {
     const portFrom = 'R';
     const portTo = 'L';
     const model = {
         nodeDataArray: [
+            { key: groupName, isGroup: true },
             { key: 'Alpha', color: 'lightblue' },
             { key: 'Beta', color: 'orange' },
             { key: 'Gamma', color: 'lightgreen' },
             { key: 'Delta', color: 'pink' },
-            { key: 'Omega', color: 'grey' }
+            { key: 'Omega', color: 'grey' },
+            { key: singleNode, color: 'grey' }
         ],
         linkDataArray:
             [
@@ -51,6 +56,27 @@ describe('<GojsDiagram />', () => {
                     new go.Binding('text', 'key')),
                 makePort(portTo, go.Spot.LeftCenter, false, true),
                 makePort(portFrom, go.Spot.RightCenter, true, false)
+            );
+
+        myDiagram.groupTemplate =
+            $(
+                go.Group, 'Vertical',
+                $(
+                    go.Panel, 'Auto',
+                    $(
+                        go.Shape, 'RoundedRectangle',
+                        {
+                            parameter1: 14,
+                            fill: 'rgba(128,128,128,0.33)'
+                        }),
+                    $(
+                        go.Placeholder,
+                        { padding: 5 })
+                ),
+                $(
+                    go.TextBlock,
+                    { alignment: go.Spot.Right, font: 'Bold 12pt Sans-Serif' },
+                    new go.Binding('text', 'key'))
             );
 
         return myDiagram;
@@ -186,6 +212,7 @@ describe('<GojsDiagram />', () => {
         expect(changeEvent.nodeData.key).toBe(newNode.key);
         expect(changeEvent.nodeData.color).toBe(newNode.color);
         expect(changeEvent.linkData).toBeUndefined();
+        expect(changeEvent.model.nodeDataArray).toContainEqual(newNode);
     });
 
     it('should trigger a model changed event when a link is added', () => {
@@ -202,6 +229,7 @@ describe('<GojsDiagram />', () => {
         expect(changeEvent.linkData.from).toBe(newLink.from);
         expect(changeEvent.linkData.to).toBe(newLink.to);
         expect(changeEvent.nodeData).toBeUndefined();
+        expect(changeEvent.model.linkDataArray).toContainEqual(newLink);
     });
 
     it('should trigger model changed events when a node is removed', () => {
@@ -213,7 +241,7 @@ describe('<GojsDiagram />', () => {
         diagram.remove(nodeToRemove);
         diagram.commitTransaction();
 
-        // 2 times: 1 removed node and 1 removed link (because the removed node was linked to another node)
+        // 2 times: 1 removed node and 1 removed link (because the removed node was linked to another node) 
         expect(modelChangeCallback.mock.calls.length).toBe(2);
         const removeLinkChangeEvent = modelChangeCallback.mock.calls[0][0];
         expect(removeLinkChangeEvent.eventType).toBe(ModelChangeEventType.Remove);
@@ -245,6 +273,21 @@ describe('<GojsDiagram />', () => {
         expect(removeLinkChangeEvent.linkData.from).toBe(linkFrom);
         expect(removeLinkChangeEvent.linkData.to).toBe(linkTo);
         expect(removeLinkChangeEvent.nodeData).toBeUndefined();
+    });
+
+    it('should trigger a model changed event when a node group is added', () => {
+        checkIfDiagramRendersModel(model, diagram);
+        diagram.startTransaction();
+        const nodeToUpdate = diagram.model.findNodeDataForKey(singleNode);
+        diagram.model.setDataProperty(nodeToUpdate, 'group', groupName);
+        diagram.commitTransaction();
+
+        expect(modelChangeCallback.mock.calls.length).toBe(1);
+        const changeEvent = modelChangeCallback.mock.calls[0][0];
+        expect(changeEvent.eventType).toBe(ModelChangeEventType.Group);
+        expect(changeEvent.nodeData.key).toBe(singleNode);
+        expect(changeEvent.nodeData.group).toBe(groupName);
+        expect(changeEvent.linkData).toBeUndefined();
     });
 });
 

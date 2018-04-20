@@ -7,7 +7,8 @@ import {
     AddNodeModelChangedHandler,
     AddLinkModelChangedHandler,
     RemoveNodeModelChangedHandler,
-    RemoveLinkModelChangedHandler
+    RemoveLinkModelChangedHandler,
+    GroupNodeModelChangedHandler,
 } from './modelChangedhandler';
 
 export interface GojsDiagramProps<N extends BaseNodeModel, L extends LinkModel> {
@@ -36,7 +37,8 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
         new AddNodeModelChangedHandler<N, L>(),
         new AddLinkModelChangedHandler<N, L>(),
         new RemoveNodeModelChangedHandler<N, L>(),
-        new RemoveLinkModelChangedHandler<N, L>()
+        new RemoveLinkModelChangedHandler<N, L>(),
+        new GroupNodeModelChangedHandler<N, L>()
     ];
 
     constructor(props: GojsDiagramProps<N, L>) {
