@@ -103,8 +103,10 @@ describe('<GojsDiagram />', () => {
     let diagram: Diagram;
     let wrapper;
     let modelChangeCallback;
+    let keyIndex = 0;
 
     beforeEach(() => {
+        keyIndex = 0;
         const dom = document.body;
         modelChangeCallback = jest.fn();
         wrapper = mount(
@@ -121,6 +123,10 @@ describe('<GojsDiagram />', () => {
                     onModelChange={modelChangeCallback}
                     linkFromPortIdProperty={portFrom}
                     linkToPortIdProperty={portTo}
+                    makeUniqueKeyFunction={() => {
+                        keyIndex++;
+                        return keyIndex;
+                    }}
                 />
             ),
             { attachTo: dom });
@@ -288,6 +294,17 @@ describe('<GojsDiagram />', () => {
         expect(changeEvent.nodeData.key).toBe(singleNode);
         expect(changeEvent.nodeData.group).toBe(groupName);
         expect(changeEvent.linkData).toBeUndefined();
+    });
+
+    it('should use makeUniqueKeyFunction (if provided) to generate gojs key', () => {
+        checkIfDiagramRendersModel(model, diagram);
+        diagram.startTransaction();
+        diagram.model.addNodeData({ color: 'lightblue' });
+        diagram.commitTransaction();
+
+        // In this test, makeUniqueKeyFunction is an incremental function,
+        // so the key of the new node should be 1
+        expect(diagram.nodes.any(e => e.key === 1 && e.data.color === 'lightblue')).toBeTruthy();
     });
 });
 

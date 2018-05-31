@@ -19,6 +19,7 @@ export interface GojsDiagramProps<N extends BaseNodeModel, L extends LinkModel> 
     onModelChange?: (event: ModelChangeEvent<N, L>) => void;
     linkFromPortIdProperty?: string;
     linkToPortIdProperty?: string;
+    makeUniqueKeyFunction?: () => void;
 
 }
 
@@ -72,9 +73,11 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
         if (onModelChange) {
             this.myDiagram.addModelChangedListener(this.modelChangedHandler);
         }
+
         this.myDiagram.model = go.GraphObject.make(
             go.GraphLinksModel,
             {
+                ...(this.props.makeUniqueKeyFunction && { makeUniqueKeyFunction: this.props.makeUniqueKeyFunction }),
                 linkFromPortIdProperty: this.props.linkFromPortIdProperty || '',
                 linkToPortIdProperty: this.props.linkToPortIdProperty || '',
                 nodeDataArray: [...this.props.model.nodeDataArray],
