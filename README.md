@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/xcomponent/react-gojs.svg?branch=master)](https://travis-ci.org/xcomponent/react-gojs)
 [![TypeScript](https://badges.frapsoft.com/typescript/love/typescript.png?v=101)](https://github.com/ellerbrock/typescript-badges/)
+[![Coverage Status](https://coveralls.io/repos/github/xcomponent/react-gojs/badge.svg?branch=master)](https://coveralls.io/github/xcomponent/react-gojs?branch=master)
 
 # react-gojs
 
