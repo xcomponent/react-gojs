@@ -11,10 +11,7 @@ import {
     GroupNodeModelChangedHandler
 } from './modelChangedhandler';
 
-export interface GojsDiagramProps<
-    N extends BaseNodeModel,
-    L extends LinkModel
-> {
+export interface GojsDiagramProps<N extends BaseNodeModel, L extends LinkModel> {
     model: DiagramModel<N, L>;
     createDiagram: (id: string) => Diagram;
     diagramId: string;
@@ -33,10 +30,7 @@ export interface GojsModel extends go.Model {
     removeLinkData: (link: Object) => void;
 }
 
-class GojsDiagram<
-    N extends BaseNodeModel,
-    L extends LinkModel
-> extends React.PureComponent<GojsDiagramProps<N, L>> {
+class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.PureComponent<GojsDiagramProps<N, L>> {
     private myDiagram: Diagram;
     private modelChangedHandlers = [
         new AddNodeModelChangedHandler<N, L>(),
@@ -89,38 +83,24 @@ class GojsDiagram<
         });
     }
     render() {
-        return (
-            <div id={this.props.diagramId} className={this.props.className} />
-        );
+        return <div id={this.props.diagramId} className={this.props.className} />;
     }
 
     private modelChangedHandler(evt: ChangedEvent) {
         this.modelChangedHandlers.forEach(handler => {
             if (handler.canHandle(evt)) {
-                handler.handle(
-                    evt,
-                    this.props.model,
-                    this.props.onModelChange!
-                );
+                handler.handle(evt, this.props.model, this.props.onModelChange!);
             }
         });
     }
 
     private applyAddRemoveNodesFromModel() {
         const nodesToAdd = this.props.model.nodeDataArray
-            .filter(
-                e =>
-                    this.myDiagram.model.nodeDataArray.findIndex(
-                        (el: BaseNodeModel) => el.key === e.key
-                    ) === -1
-            )
+            .filter(e => this.myDiagram.model.nodeDataArray.findIndex((el: BaseNodeModel) => el.key === e.key) === -1)
             .map(node => Object.assign({}, node));
         this.myDiagram.model.addNodeDataCollection(nodesToAdd);
         const nodesToRemove = this.myDiagram.model.nodeDataArray.filter(
-            (e: BaseNodeModel) =>
-                this.props.model.nodeDataArray.findIndex(
-                    el => el.key === e.key
-                ) === -1
+            (e: BaseNodeModel) => this.props.model.nodeDataArray.findIndex(el => el.key === e.key) === -1
         );
         this.myDiagram.model.removeNodeDataCollection(nodesToRemove);
     }
@@ -135,16 +115,11 @@ class GojsDiagram<
             )
             .map(link => Object.assign({}, link));
         (this.myDiagram.model as GojsModel).addLinkDataCollection(linksToAdd);
-        const linksToRemove = (this.myDiagram
-            .model as GojsModel).linkDataArray.filter(
+        const linksToRemove = (this.myDiagram.model as GojsModel).linkDataArray.filter(
             (e: LinkModel) =>
-                this.props.model.linkDataArray.findIndex(
-                    el => el.from === e.from && el.to === e.to
-                ) === -1
+                this.props.model.linkDataArray.findIndex(el => el.from === e.from && el.to === e.to) === -1
         );
-        (this.myDiagram.model as GojsModel).removeLinkDataCollection(
-            linksToRemove
-        );
+        (this.myDiagram.model as GojsModel).removeLinkDataCollection(linksToRemove);
     }
 
     private applyUpdatesFromModel() {

@@ -40,12 +40,7 @@ describe('<GojsDiagram />', () => {
         myDiagram.nodeTemplate = $(
             go.Node,
             'Auto',
-            $(
-                go.Shape,
-                'RoundedRectangle',
-                { strokeWidth: 0 },
-                new go.Binding('fill', 'color')
-            ),
+            $(go.Shape, 'RoundedRectangle', { strokeWidth: 0 }, new go.Binding('fill', 'color')),
             $(go.TextBlock, { margin: 8 }, new go.Binding('text', 'key')),
             makePort(portTo, go.Spot.LeftCenter, false, true),
             makePort(portFrom, go.Spot.RightCenter, true, false)
@@ -63,22 +58,13 @@ describe('<GojsDiagram />', () => {
                 }),
                 $(go.Placeholder, { padding: 5 })
             ),
-            $(
-                go.TextBlock,
-                { alignment: go.Spot.Right, font: 'Bold 12pt Sans-Serif' },
-                new go.Binding('text', 'key')
-            )
+            $(go.TextBlock, { alignment: go.Spot.Right, font: 'Bold 12pt Sans-Serif' }, new go.Binding('text', 'key'))
         );
 
         return myDiagram;
     };
 
-    const makePort = (
-        name: string,
-        spot: go.Spot,
-        isOutput: boolean,
-        isInput: boolean
-    ) => {
+    const makePort = (name: string, spot: go.Spot, isOutput: boolean, isInput: boolean) => {
         const $ = go.GraphObject.make;
         return $(go.Shape, 'Circle', {
             fill: 'black',
@@ -136,10 +122,7 @@ describe('<GojsDiagram />', () => {
         {
             updatedModel: {
                 ...model,
-                nodeDataArray: [
-                    ...model.nodeDataArray,
-                    { key: 'New', color: 'blue' }
-                ]
+                nodeDataArray: [...model.nodeDataArray, { key: 'New', color: 'blue' }]
             },
             description: 'adding a new node'
         },
@@ -253,9 +236,7 @@ describe('<GojsDiagram />', () => {
         checkIfDiagramRendersModel(model, diagram);
 
         const nodeToRemoveName = 'Delta';
-        const nodeToRemove = diagram.nodes
-            .filter(node => node.key === nodeToRemoveName)
-            .first();
+        const nodeToRemove = diagram.nodes.filter(node => node.key === nodeToRemoveName).first();
         diagram.startTransaction();
         diagram.remove(nodeToRemove);
         diagram.commitTransaction();
@@ -263,17 +244,13 @@ describe('<GojsDiagram />', () => {
         // 2 times: 1 removed node and 1 removed link (because the removed node was linked to another node)
         expect(modelChangeCallback.mock.calls.length).toBe(2);
         const removeLinkChangeEvent = modelChangeCallback.mock.calls[0][0];
-        expect(removeLinkChangeEvent.eventType).toBe(
-            ModelChangeEventType.Remove
-        );
+        expect(removeLinkChangeEvent.eventType).toBe(ModelChangeEventType.Remove);
         expect(removeLinkChangeEvent.linkData.from).toBe('Beta');
         expect(removeLinkChangeEvent.linkData.to).toBe(nodeToRemoveName);
         expect(removeLinkChangeEvent.nodeData).toBeUndefined();
 
         const removeNodeChangeEvent = modelChangeCallback.mock.calls[1][0];
-        expect(removeNodeChangeEvent.eventType).toBe(
-            ModelChangeEventType.Remove
-        );
+        expect(removeNodeChangeEvent.eventType).toBe(ModelChangeEventType.Remove);
         expect(removeNodeChangeEvent.nodeData.key).toBe(nodeToRemoveName);
         expect(removeNodeChangeEvent.nodeData.color).toBe('pink');
         expect(removeNodeChangeEvent.linkData).toBeUndefined();
@@ -285,10 +262,7 @@ describe('<GojsDiagram />', () => {
         const linkFrom = 'Gamma';
         const linkTo = 'Omega';
         const linkToRemove = diagram.links
-            .filter(
-                link =>
-                    link.fromNode.key === linkFrom && link.toNode.key === linkTo
-            )
+            .filter(link => link.fromNode.key === linkFrom && link.toNode.key === linkTo)
             .first();
         diagram.startTransaction();
         diagram.remove(linkToRemove);
@@ -296,9 +270,7 @@ describe('<GojsDiagram />', () => {
 
         expect(modelChangeCallback.mock.calls.length).toBe(1);
         const removeLinkChangeEvent = modelChangeCallback.mock.calls[0][0];
-        expect(removeLinkChangeEvent.eventType).toBe(
-            ModelChangeEventType.Remove
-        );
+        expect(removeLinkChangeEvent.eventType).toBe(ModelChangeEventType.Remove);
         expect(removeLinkChangeEvent.linkData.from).toBe(linkFrom);
         expect(removeLinkChangeEvent.linkData.to).toBe(linkTo);
         expect(removeLinkChangeEvent.nodeData).toBeUndefined();
@@ -327,40 +299,24 @@ describe('<GojsDiagram />', () => {
 
         // In this test, makeUniqueKeyFunction is an incremental function,
         // so the key of the new node should be 1
-        expect(
-            diagram.nodes.any(e => e.key === 1 && e.data.color === 'lightblue')
-        ).toBeTruthy();
+        expect(diagram.nodes.any(e => e.key === 1 && e.data.color === 'lightblue')).toBeTruthy();
     });
 });
 
 const checkIfDiagramRendersModel = (model, diagram: Diagram) => {
     expect(diagram.nodes.count).toBe(model.nodeDataArray.length);
     model.nodeDataArray.forEach(node => {
-        expect(
-            diagram.nodes.any(
-                e => e.key === node.key && e.data.color === node.color
-            )
-        ).toBeTruthy();
+        expect(diagram.nodes.any(e => e.key === node.key && e.data.color === node.color)).toBeTruthy();
     });
     diagram.nodes.each(node => {
-        expect(
-            model.nodeDataArray.findIndex(
-                e => e.key === node.key && e.color === node.data.color
-            ) >= 0
-        ).toBeTruthy();
+        expect(model.nodeDataArray.findIndex(e => e.key === node.key && e.color === node.data.color) >= 0).toBeTruthy();
     });
     model.linkDataArray.forEach(link => {
-        expect(
-            diagram.links.any(
-                e => e.fromNode.key === link.from && e.toNode.key === link.to
-            )
-        ).toBeTruthy();
+        expect(diagram.links.any(e => e.fromNode.key === link.from && e.toNode.key === link.to)).toBeTruthy();
     });
     diagram.links.each(link => {
         expect(
-            model.linkDataArray.findIndex(
-                e => e.from === link.fromNode.key && e.to === link.toNode.key
-            ) >= 0
+            model.linkDataArray.findIndex(e => e.from === link.fromNode.key && e.to === link.toNode.key) >= 0
         ).toBeTruthy();
     });
 };
