@@ -22,80 +22,78 @@ describe('<GojsDiagram />', () => {
             { key: 'Omega', color: 'grey' },
             { key: singleNode, color: 'grey' }
         ],
-        linkDataArray:
-            [
-                { from: 'Alpha', to: 'Beta', 'fromPort': portFrom, 'toPort': portTo },
-                { from: 'Alpha', to: 'Gamma', 'fromPort': portFrom, 'toPort': portTo },
-                { from: 'Beta', to: 'Delta', 'fromPort': portFrom, 'toPort': portTo },
-                { from: 'Gamma', to: 'Omega', 'fromPort': portFrom, 'toPort': portTo }
-            ]
+        linkDataArray: [
+            { from: 'Alpha', to: 'Beta', fromPort: portFrom, toPort: portTo },
+            { from: 'Alpha', to: 'Gamma', fromPort: portFrom, toPort: portTo },
+            { from: 'Beta', to: 'Delta', fromPort: portFrom, toPort: portTo },
+            { from: 'Gamma', to: 'Omega', fromPort: portFrom, toPort: portTo }
+        ]
     };
 
     const createDiagram = (diagramId: string): Diagram => {
         const $ = go.GraphObject.make;
 
-        const myDiagram: Diagram = $(
-            go.Diagram,
-            diagramId,
-            {
-                initialContentAlignment: go.Spot.LeftCenter,
-            });
+        const myDiagram: Diagram = $(go.Diagram, diagramId, {
+            initialContentAlignment: go.Spot.LeftCenter
+        });
 
-        myDiagram.nodeTemplate =
+        myDiagram.nodeTemplate = $(
+            go.Node,
+            'Auto',
             $(
-                go.Node,
+                go.Shape,
+                'RoundedRectangle',
+                { strokeWidth: 0 },
+                new go.Binding('fill', 'color')
+            ),
+            $(go.TextBlock, { margin: 8 }, new go.Binding('text', 'key')),
+            makePort(portTo, go.Spot.LeftCenter, false, true),
+            makePort(portFrom, go.Spot.RightCenter, true, false)
+        );
+
+        myDiagram.groupTemplate = $(
+            go.Group,
+            'Vertical',
+            $(
+                go.Panel,
                 'Auto',
-                $(
-                    go.Shape,
-                    'RoundedRectangle',
-                    { strokeWidth: 0 },
-                    new go.Binding('fill', 'color')),
-                $(
-                    go.TextBlock,
-                    { margin: 8 },
-                    new go.Binding('text', 'key')),
-                makePort(portTo, go.Spot.LeftCenter, false, true),
-                makePort(portFrom, go.Spot.RightCenter, true, false)
-            );
-
-        myDiagram.groupTemplate =
+                $(go.Shape, 'RoundedRectangle', {
+                    parameter1: 14,
+                    fill: 'rgba(128,128,128,0.33)'
+                }),
+                $(go.Placeholder, { padding: 5 })
+            ),
             $(
-                go.Group, 'Vertical',
-                $(
-                    go.Panel, 'Auto',
-                    $(
-                        go.Shape, 'RoundedRectangle',
-                        {
-                            parameter1: 14,
-                            fill: 'rgba(128,128,128,0.33)'
-                        }),
-                    $(
-                        go.Placeholder,
-                        { padding: 5 })
-                ),
-                $(
-                    go.TextBlock,
-                    { alignment: go.Spot.Right, font: 'Bold 12pt Sans-Serif' },
-                    new go.Binding('text', 'key'))
-            );
+                go.TextBlock,
+                { alignment: go.Spot.Right, font: 'Bold 12pt Sans-Serif' },
+                new go.Binding('text', 'key')
+            )
+        );
 
         return myDiagram;
     };
 
-    const makePort = (name: string, spot: go.Spot, isOutput: boolean, isInput: boolean) => {
+    const makePort = (
+        name: string,
+        spot: go.Spot,
+        isOutput: boolean,
+        isInput: boolean
+    ) => {
         const $ = go.GraphObject.make;
-        return $(
-            go.Shape, 'Circle',
-            {
-                fill: 'black',
-                desiredSize: new go.Size(8, 8),
-                alignment: spot, alignmentFocus: spot,
-                fromSpot: spot, toSpot: spot,
-                portId: name,
-                fromLinkable: isOutput, toLinkable: isInput,
-                fromLinkableDuplicates: false, toLinkableDuplicates: false,
-                cursor: 'pointer',
-            });
+        return $(go.Shape, 'Circle', {
+            fill: 'black',
+            desiredSize: new go.Size(8, 8),
+            alignment: spot,
+            alignmentFocus: spot,
+            fromSpot: spot,
+            toSpot: spot,
+            portId: name,
+            fromLinkable: isOutput,
+            toLinkable: isInput,
+            fromLinkableDuplicates: false,
+            toLinkableDuplicates: false,
+            cursor: 'pointer'
+        });
     };
 
     const myDiagramId = 'myDiagramId';
@@ -110,26 +108,24 @@ describe('<GojsDiagram />', () => {
         const dom = document.body;
         modelChangeCallback = jest.fn();
         wrapper = mount(
-            (
-                <GojsDiagram
-                    diagramId={myDiagramId}
-                    model={model}
-                    createDiagram={(id) => {
-                        diagram = createDiagram(myDiagramId);
-                        return diagram;
-                    }
-                    }
-                    className="fakecss"
-                    onModelChange={modelChangeCallback}
-                    linkFromPortIdProperty={portFrom}
-                    linkToPortIdProperty={portTo}
-                    makeUniqueKeyFunction={() => {
-                        keyIndex++;
-                        return keyIndex;
-                    }}
-                />
-            ),
-            { attachTo: dom });
+            <GojsDiagram
+                diagramId={myDiagramId}
+                model={model}
+                createDiagram={id => {
+                    diagram = createDiagram(myDiagramId);
+                    return diagram;
+                }}
+                className="fakecss"
+                onModelChange={modelChangeCallback}
+                linkFromPortIdProperty={portFrom}
+                linkToPortIdProperty={portTo}
+                makeUniqueKeyFunction={() => {
+                    keyIndex++;
+                    return keyIndex;
+                }}
+            />,
+            { attachTo: dom }
+        );
     });
 
     it('should render links and nodes in the diagram based on the model provided as prop', () => {
@@ -152,24 +148,37 @@ describe('<GojsDiagram />', () => {
                 nodeDataArray: [
                     { key: 'Alpha', color: 'lightblue' },
                     { key: 'Beta', color: 'orange' },
-                    { key: 'Gamma', color: 'lightgreen' },
+                    { key: 'Gamma', color: 'lightgreen' }
                 ],
-                linkDataArray:
-                    [
-                        { from: 'Alpha', to: 'Beta', 'fromPort': portFrom, 'toPort': portTo },
-                        { from: 'Alpha', to: 'Gamma', 'fromPort': portFrom, 'toPort': portTo }
-                    ]
+                linkDataArray: [
+                    {
+                        from: 'Alpha',
+                        to: 'Beta',
+                        fromPort: portFrom,
+                        toPort: portTo
+                    },
+                    {
+                        from: 'Alpha',
+                        to: 'Gamma',
+                        fromPort: portFrom,
+                        toPort: portTo
+                    }
+                ]
             },
             description: 'removing nodes and links'
         },
         {
             updatedModel: {
                 ...model,
-                linkDataArray:
-                    [
-                        ...model.linkDataArray,
-                        { from: 'Alpha', to: 'Omega', 'fromPort': portFrom, 'toPort': portTo }
-                    ]
+                linkDataArray: [
+                    ...model.linkDataArray,
+                    {
+                        from: 'Alpha',
+                        to: 'Omega',
+                        fromPort: portFrom,
+                        toPort: portTo
+                    }
+                ]
             },
             description: 'adding a new link'
         },
@@ -190,7 +199,9 @@ describe('<GojsDiagram />', () => {
 
     testCases.forEach(test => {
         // tslint:disable-next-line:max-line-length
-        it(`should update the render of the diagram (nodes and links) based on the new model provided as prop - case: ${test.description}`, () => {
+        it(`should update the render of the diagram (nodes and links) based on the new model provided as prop - case: ${
+            test.description
+        }`, () => {
             checkIfDiagramRendersModel(model, diagram);
             wrapper.setProps({ model: test.updatedModel });
             checkIfDiagramRendersModel(test.updatedModel, diagram);
@@ -242,7 +253,9 @@ describe('<GojsDiagram />', () => {
         checkIfDiagramRendersModel(model, diagram);
 
         const nodeToRemoveName = 'Delta';
-        const nodeToRemove = diagram.nodes.filter(node => node.key === nodeToRemoveName).first();
+        const nodeToRemove = diagram.nodes
+            .filter(node => node.key === nodeToRemoveName)
+            .first();
         diagram.startTransaction();
         diagram.remove(nodeToRemove);
         diagram.commitTransaction();
@@ -250,13 +263,17 @@ describe('<GojsDiagram />', () => {
         // 2 times: 1 removed node and 1 removed link (because the removed node was linked to another node)
         expect(modelChangeCallback.mock.calls.length).toBe(2);
         const removeLinkChangeEvent = modelChangeCallback.mock.calls[0][0];
-        expect(removeLinkChangeEvent.eventType).toBe(ModelChangeEventType.Remove);
+        expect(removeLinkChangeEvent.eventType).toBe(
+            ModelChangeEventType.Remove
+        );
         expect(removeLinkChangeEvent.linkData.from).toBe('Beta');
         expect(removeLinkChangeEvent.linkData.to).toBe(nodeToRemoveName);
         expect(removeLinkChangeEvent.nodeData).toBeUndefined();
 
         const removeNodeChangeEvent = modelChangeCallback.mock.calls[1][0];
-        expect(removeNodeChangeEvent.eventType).toBe(ModelChangeEventType.Remove);
+        expect(removeNodeChangeEvent.eventType).toBe(
+            ModelChangeEventType.Remove
+        );
         expect(removeNodeChangeEvent.nodeData.key).toBe(nodeToRemoveName);
         expect(removeNodeChangeEvent.nodeData.color).toBe('pink');
         expect(removeNodeChangeEvent.linkData).toBeUndefined();
@@ -267,15 +284,21 @@ describe('<GojsDiagram />', () => {
 
         const linkFrom = 'Gamma';
         const linkTo = 'Omega';
-        const linkToRemove = diagram.links.filter(link =>
-            link.fromNode.key === linkFrom && link.toNode.key === linkTo).first();
+        const linkToRemove = diagram.links
+            .filter(
+                link =>
+                    link.fromNode.key === linkFrom && link.toNode.key === linkTo
+            )
+            .first();
         diagram.startTransaction();
         diagram.remove(linkToRemove);
         diagram.commitTransaction();
 
         expect(modelChangeCallback.mock.calls.length).toBe(1);
         const removeLinkChangeEvent = modelChangeCallback.mock.calls[0][0];
-        expect(removeLinkChangeEvent.eventType).toBe(ModelChangeEventType.Remove);
+        expect(removeLinkChangeEvent.eventType).toBe(
+            ModelChangeEventType.Remove
+        );
         expect(removeLinkChangeEvent.linkData.from).toBe(linkFrom);
         expect(removeLinkChangeEvent.linkData.to).toBe(linkTo);
         expect(removeLinkChangeEvent.nodeData).toBeUndefined();
@@ -304,23 +327,40 @@ describe('<GojsDiagram />', () => {
 
         // In this test, makeUniqueKeyFunction is an incremental function,
         // so the key of the new node should be 1
-        expect(diagram.nodes.any(e => e.key === 1 && e.data.color === 'lightblue')).toBeTruthy();
+        expect(
+            diagram.nodes.any(e => e.key === 1 && e.data.color === 'lightblue')
+        ).toBeTruthy();
     });
 });
 
 const checkIfDiagramRendersModel = (model, diagram: Diagram) => {
     expect(diagram.nodes.count).toBe(model.nodeDataArray.length);
     model.nodeDataArray.forEach(node => {
-        expect(diagram.nodes.any(e => e.key === node.key && e.data.color === node.color)).toBeTruthy();
+        expect(
+            diagram.nodes.any(
+                e => e.key === node.key && e.data.color === node.color
+            )
+        ).toBeTruthy();
     });
     diagram.nodes.each(node => {
-        expect(model.nodeDataArray.findIndex(e => e.key === node.key && e.color === node.data.color) >= 0).toBeTruthy();
+        expect(
+            model.nodeDataArray.findIndex(
+                e => e.key === node.key && e.color === node.data.color
+            ) >= 0
+        ).toBeTruthy();
     });
     model.linkDataArray.forEach(link => {
-        expect(diagram.links.any(e => e.fromNode.key === link.from && e.toNode.key === link.to)).toBeTruthy();
+        expect(
+            diagram.links.any(
+                e => e.fromNode.key === link.from && e.toNode.key === link.to
+            )
+        ).toBeTruthy();
     });
     diagram.links.each(link => {
-        expect(model.linkDataArray.findIndex(e =>
-            e.from === link.fromNode.key && e.to === link.toNode.key) >= 0).toBeTruthy();
+        expect(
+            model.linkDataArray.findIndex(
+                e => e.from === link.fromNode.key && e.to === link.toNode.key
+            ) >= 0
+        ).toBeTruthy();
     });
 };

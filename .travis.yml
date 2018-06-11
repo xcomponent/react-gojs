@@ -10,10 +10,12 @@ cache:
   - node_modules
 install:
 - yarn install
-- yarn build
 script:
 - yarn run lint
-- yarn run test --silent
+- yarn run test --coverage
+- yarn build
+after_script: # Upload coverage reports 
+  - COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN yarn run coveralls
 deploy:
   - provider: npm
     email: dev@xcomponent.com
