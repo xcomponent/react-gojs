@@ -5,10 +5,7 @@ export enum ModelChangeEventType {
     Remove = 'Remove',
     Group = 'Group'
 }
-export interface ModelChangeEvent<
-    N extends BaseNodeModel,
-    L extends LinkModel
-> {
+export interface ModelChangeEvent<N extends BaseNodeModel, L extends LinkModel> {
     eventType: ModelChangeEventType;
     nodeData?: N;
     linkData?: L;
