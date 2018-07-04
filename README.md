@@ -65,7 +65,6 @@ const model = {
             { from: 'Gamma', to: 'Omega' }
         ]
 };
-/>
 ```
 - createDiagram: method called by the React component to create the customized GoJS diagram object. It enables you to customize the look and feel.
 
