@@ -1,6 +1,6 @@
 {
     "name": "react-gojs",
-    "version": "1.3.2",
+    "version": "1.3.3",
     "description": "GoJS React integration",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
