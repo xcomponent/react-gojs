@@ -1,26 +1,28 @@
 language: node_js
 node_js:
-- '8'
-- '10'
+    - '8'
+    - '10'
 sudo: false
 os:
-- linux
+    - linux
 cache:
-  directories:
-  - node_modules
+    directories:
+        - node_modules
 install:
-- yarn install
+    - yarn install
 script:
-- yarn run lint
-- yarn run test --coverage
-- yarn build
-after_script: # Upload coverage reports 
-  - COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN yarn run coveralls
+    - yarn run lint
+    - yarn run test --coverage
+    - yarn build
+after_script: # Upload coverage reports
+    - COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN yarn run coveralls
 deploy:
-  - provider: npm
-    email: dev@xcomponent.com
-    skip_cleanup: true
-    api_key:
-      secure: ItolgEW9AuXawyfDPX9VifuRzdrNGAqqw68COeJczpqXIldIIK3o5PboY6HbPkK9xySHVxp2X4qe1jui/TLcPAo9Eu0c04dYdORmqCyrLctQOGX9RggKnpHRa7ws0224efZZQnV0YPpPAzPFqK17g54y3RKdrWqvO1NHlP9diW+25rCOyraMMuDY/3ShxiZ0i5j0tU752m5hTIbYIYxWH+Tewp8HEKiU8N+AWhTPiRF/LP1geqkMkesYj6jaRdTFRavfiqnQHEdMC6rY02xyyzsQHBNIp4HSrsY9RsjONNYbBvOJUUjEE821r76XLDSQTlV8lqnBWGBJ8SsPWXwcmqYW3k4GeDzebjY5YLyglfzHVkhoLGOH1WMvLcJdSuMTA6MXV/RYjRmAFnB1AOba97mNmjGrJvPuzo4PEsbq9VbwHtI1R3wiHm50pOiXsR1OPX3VRg5X/vAkPDjYtCZzyELHDzF0jwu85NrLk1szVHEJQKAB3f6WWJeF1/xLAbleNyEueXYM1eNddUkgHl2wUUbNBzIQhV+KLBjTW3Or+1ob8l9uGC8wh+QWMFNUvdH6EAaWqjwEsIrhm0bjxFeMr7OQT8Nz8J19f9Xr5Zw1qI02qH5Qt7NyFfIH1lS3lRgMa2LfOkwVPc8m3tnbv8Z821cB/QFHzs5nbYpBYxFthZg=
-    on:
-      tags: true
+    - provider: npm
+      email: dev@xcomponent.com
+      skip_cleanup: true
+      api_key:
+          secure:
+              ItolgEW9AuXawyfDPX9VifuRzdrNGAqqw68COeJczpqXIldIIK3o5PboY6HbPkK9xySHVxp2X4qe1jui/TLcPAo9Eu0c04dYdORmqCyrLctQOGX9RggKnpHRa7ws0224efZZQnV0YPpPAzPFqK17g54y3RKdrWqvO1NHlP9diW+25rCOyraMMuDY/3ShxiZ0i5j0tU752m5hTIbYIYxWH+Tewp8HEKiU8N+AWhTPiRF/LP1geqkMkesYj6jaRdTFRavfiqnQHEdMC6rY02xyyzsQHBNIp4HSrsY9RsjONNYbBvOJUUjEE821r76XLDSQTlV8lqnBWGBJ8SsPWXwcmqYW3k4GeDzebjY5YLyglfzHVkhoLGOH1WMvLcJdSuMTA6MXV/RYjRmAFnB1AOba97mNmjGrJvPuzo4PEsbq9VbwHtI1R3wiHm50pOiXsR1OPX3VRg5X/vAkPDjYtCZzyELHDzF0jwu85NrLk1szVHEJQKAB3f6WWJeF1/xLAbleNyEueXYM1eNddUkgHl2wUUbNBzIQhV+KLBjTW3Or+1ob8l9uGC8wh+QWMFNUvdH6EAaWqjwEsIrhm0bjxFeMr7OQT8Nz8J19f9Xr5Zw1qI02qH5Qt7NyFfIH1lS3lRgMa2LfOkwVPc8m3tnbv8Z821cB/QFHzs5nbYpBYxFthZg=
+      on:
+          tags: true
+          node: '10'
