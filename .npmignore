@@ -5,3 +5,7 @@ scripts
 tslint.json
 .travis.yml
 *.tgz
+.git
+renovate.json
+.prettierrc
+coverage
