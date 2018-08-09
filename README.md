@@ -1,7 +1,9 @@
-[![Build Status](https://travis-ci.org/xcomponent/react-gojs.svg?branch=master)](https://travis-ci.org/xcomponent/react-gojs)
-[![TypeScript](https://badges.frapsoft.com/typescript/love/typescript.png?v=101)](https://github.com/ellerbrock/typescript-badges/)
-[![Coverage Status](https://coveralls.io/repos/github/xcomponent/react-gojs/badge.svg?branch=master)](https://coveralls.io/github/xcomponent/react-gojs?branch=master)
+[![](http://slack.xcomponent.com/badge.svg)](http://slack.xcomponent.com/)
 [![npm version](https://badge.fury.io/js/react-gojs.svg)](https://badge.fury.io/js/react-gojs)
+[![npm](https://img.shields.io/npm/dt/react-gojs.svg)](https://www.npmjs.com/package/react-gojs.svg)
+[![Build Status](https://travis-ci.org/xcomponent/react-gojs.svg?branch=master)](https://travis-ci.org/xcomponent/react-gojs)
+[![Coverage Status](https://coveralls.io/repos/github/xcomponent/react-gojs/badge.svg?branch=master)](https://coveralls.io/github/xcomponent/react-gojs?branch=master)
+[![TypeScript](https://badges.frapsoft.com/typescript/love/typescript.png?v=101)](https://github.com/ellerbrock/typescript-badges/)
 
 # react-gojs
 
