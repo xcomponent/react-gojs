@@ -1,41 +1,26 @@
 {
-  "compilerOptions": {
-    "outDir": "dist",
-    "module": "commonjs",
-    "target": "es5",
-    "declaration": true,
-    "lib": [
-      "dom",
-      "es6",
-      "scripthost"
-    ],
-    "sourceMap": true,
-    "allowJs": false,
-    "jsx": "react",
-    "moduleResolution": "node",
-    "rootDir": "src",
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": false,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
-    "skipLibCheck": true
-  },
-  "exclude": [
-    "node_modules",
-    "build",
-    "scripts",
-    "acceptance-tests",
-    "jest",
-    "**/*.test.ts",
-    "**/*.test.tsx"
-  ],
-  "include": [
-    "src/**/*"
-  ],
-  "types": [
-    "typePatches"
-  ]
+    "compilerOptions": {
+        "outDir": "dist",
+        "module": "commonjs",
+        "target": "es5",
+        "declaration": true,
+        "lib": ["dom", "es6", "scripthost"],
+        "sourceMap": true,
+        "allowJs": false,
+        "jsx": "react",
+        "moduleResolution": "node",
+        "rootDir": "src",
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": false,
+        "strictNullChecks": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "noUnusedLocals": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true
+    },
+    "exclude": ["node_modules", "build", "scripts", "acceptance-tests", "jest", "**/*.test.ts", "**/*.test.tsx"],
+    "include": ["src/**/*"],
+    "types": ["typePatches"]
 }

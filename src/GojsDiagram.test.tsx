@@ -3,8 +3,7 @@ import * as go from 'gojs';
 import { Diagram } from 'gojs';
 import { mount } from 'enzyme';
 import GojsDiagram, { GojsModel } from './GojsDiagram';
-import { ModelChangeEvent, ModelChangeEventType } from './modelChangeEvent';
-import { LinkModel, BaseNodeModel } from './model';
+import { ModelChangeEventType } from './modelChangeEvent';
 
 const groupName = 'myGroup';
 const singleNode = 'singleNode';
