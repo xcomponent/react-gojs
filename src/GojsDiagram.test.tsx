@@ -114,6 +114,10 @@ describe('<GojsDiagram />', () => {
         );
     });
 
+    it('should default to "category" for nodeCategoryProperty', () => {
+        expect(diagram.model.nodeCategoryProperty === 'category').toBeTruthy();
+    });
+
     it('should render links and nodes in the diagram based on the model provided as prop', () => {
         checkIfDiagramRendersModel(model, diagram);
     });
