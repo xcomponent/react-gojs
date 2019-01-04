@@ -38,7 +38,7 @@
         "husky": "^1.1.1",
         "jest": "^23.6.0",
         "jest-canvas-mock": "^1.1.0",
-        "prettier": "1.15.1",
+        "prettier": "1.15.3",
         "pretty-quick": "^1.7.0",
         "react": "16.x",
         "react-dom": "16.x",
