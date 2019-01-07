@@ -8,7 +8,10 @@ import {
     AddLinkModelChangedHandler,
     RemoveNodeModelChangedHandler,
     RemoveLinkModelChangedHandler,
-    GroupNodeModelChangedHandler
+    GroupNodeModelChangedHandler,
+    BeginTransactionHandler,
+    CommitTransactionHandler,
+    DiagramNotificationDelegate
 } from './modelChangedhandler';
 
 export interface GojsDiagramProps<N extends BaseNodeModel, L extends LinkModel> {
@@ -31,18 +34,23 @@ export interface GojsModel extends go.Model {
     removeLinkData: (link: Object) => void;
 }
 
-class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.PureComponent<GojsDiagramProps<N, L>> {
+class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.PureComponent<GojsDiagramProps<N, L>>
+    implements DiagramNotificationDelegate<N, L> {
     private myDiagram: Diagram;
+    private eventsToDispatch: ModelChangeEvent<N, L>[];
     private modelChangedHandlers = [
         new AddNodeModelChangedHandler<N, L>(),
         new AddLinkModelChangedHandler<N, L>(),
         new RemoveNodeModelChangedHandler<N, L>(),
         new RemoveLinkModelChangedHandler<N, L>(),
-        new GroupNodeModelChangedHandler<N, L>()
+        new GroupNodeModelChangedHandler<N, L>(),
+        new BeginTransactionHandler<N, L>(),
+        new CommitTransactionHandler<N, L>()
     ];
 
     constructor(props: GojsDiagramProps<N, L>) {
         super(props);
+        this.eventsToDispatch = [];
         this.modelChangedHandler = this.modelChangedHandler.bind(this);
     }
 
@@ -88,10 +96,23 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
         return <div id={this.props.diagramId} className={this.props.className} />;
     }
 
+    enqueueEvent(event: ModelChangeEvent<N, L>) {
+        this.eventsToDispatch = this.eventsToDispatch.concat(event);
+    }
+
+    clear() {
+        this.eventsToDispatch = [];
+    }
+
+    dispatchAll() {
+        this.eventsToDispatch.forEach(eventToDispatch => this.props.onModelChange!(eventToDispatch));
+        this.eventsToDispatch = [];
+    }
+
     private modelChangedHandler(evt: ChangedEvent) {
         this.modelChangedHandlers.forEach(handler => {
             if (handler.canHandle(evt)) {
-                handler.handle(evt, this.props.model, this.props.onModelChange!);
+                handler.handle(evt, this.props.model, this);
             }
         });
     }
