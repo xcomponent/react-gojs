@@ -23,7 +23,9 @@ export interface GojsDiagramProps<N extends BaseNodeModel, L extends LinkModel> 
     linkFromPortIdProperty?: string;
     linkToPortIdProperty?: string;
     nodeCategoryProperty?: string;
+    linkKeyProperty?: string;
     makeUniqueKeyFunction?: () => void;
+    makeUniqueLinkKeyFunction?: () => void;
 }
 
 export interface GojsModel extends go.Model {
@@ -85,11 +87,14 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
             ...(this.props.makeUniqueKeyFunction && {
                 makeUniqueKeyFunction: this.props.makeUniqueKeyFunction
             }),
+
             linkFromPortIdProperty: this.props.linkFromPortIdProperty || '',
             linkToPortIdProperty: this.props.linkToPortIdProperty || '',
             nodeDataArray: [...this.props.model.nodeDataArray],
             linkDataArray: [...this.props.model.linkDataArray],
-            nodeCategoryProperty: this.props.nodeCategoryProperty || 'category'
+            nodeCategoryProperty: this.props.nodeCategoryProperty || 'category',
+            linkKeyProperty: this.props.linkKeyProperty || '',
+            makeUniqueLinkKeyFunction: this.props.makeUniqueLinkKeyFunction || null
         });
     }
     render() {
