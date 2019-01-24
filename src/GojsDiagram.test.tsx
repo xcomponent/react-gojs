@@ -104,6 +104,12 @@ describe('<GojsDiagram />', () => {
                 onModelChange={modelChangeCallback}
                 linkFromPortIdProperty={portFrom}
                 linkToPortIdProperty={portTo}
+                linkKeyProperty="key"
+                makeUniqueLinkKeyFunction={() => {
+                    keyIndex++;
+                    console.log(keyIndex);
+                    return keyIndex;
+                }}
                 makeUniqueKeyFunction={() => {
                     keyIndex++;
                     return keyIndex;
@@ -303,6 +309,17 @@ describe('<GojsDiagram />', () => {
         // In this test, makeUniqueKeyFunction is an incremental function,
         // so the key of the new node should be 1
         expect(diagram.nodes.any(e => e.key === 1 && e.data.color === 'lightblue')).toBeTruthy();
+    });
+
+    it('should use makeUniqueLinkKeyFunction (if provided) to generate gojs key', () => {
+        checkIfDiagramRendersModel(model, diagram);
+        diagram.startTransaction();
+        (diagram.model as GojsModel).addLinkData({ color: 'lightblue' });
+        diagram.commitTransaction();
+
+        // In this test, makeUniqueLinkKeyFunction is an incremental function,
+        // so the key of the new node should be 1
+        expect(diagram.links.any(e => e.key === 1 && e.data.color === 'lightblue')).toBeTruthy();
     });
 });
 
