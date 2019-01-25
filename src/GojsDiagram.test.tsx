@@ -247,7 +247,7 @@ describe('<GojsDiagram />', () => {
         const nodeToRemoveName = 'Delta';
         const nodeToRemove = diagram.nodes.filter(node => node.key === nodeToRemoveName).first();
         diagram.startTransaction();
-        diagram.remove(nodeToRemove);
+        diagram.remove(nodeToRemove!);
         diagram.commitTransaction();
 
         // 2 times: 1 removed node and 1 removed link (because the removed node was linked to another node)
@@ -271,10 +271,10 @@ describe('<GojsDiagram />', () => {
         const linkFrom = 'Gamma';
         const linkTo = 'Omega';
         const linkToRemove = diagram.links
-            .filter(link => link.fromNode.key === linkFrom && link.toNode.key === linkTo)
+            .filter(link => link.fromNode!.key === linkFrom && link.toNode!.key === linkTo)
             .first();
         diagram.startTransaction();
-        diagram.remove(linkToRemove);
+        diagram.remove(linkToRemove!);
         diagram.commitTransaction();
 
         expect(modelChangeCallback.mock.calls.length).toBe(1);
@@ -289,7 +289,7 @@ describe('<GojsDiagram />', () => {
         checkIfDiagramRendersModel(model, diagram);
         diagram.startTransaction();
         const nodeToUpdate = diagram.model.findNodeDataForKey(singleNode);
-        diagram.model.setDataProperty(nodeToUpdate, 'group', groupName);
+        diagram.model.setDataProperty(nodeToUpdate!, 'group', groupName);
         diagram.commitTransaction();
 
         expect(modelChangeCallback.mock.calls.length).toBe(1);
@@ -332,11 +332,11 @@ const checkIfDiagramRendersModel = (model, diagram: Diagram) => {
         expect(model.nodeDataArray.findIndex(e => e.key === node.key && e.color === node.data.color) >= 0).toBeTruthy();
     });
     model.linkDataArray.forEach(link => {
-        expect(diagram.links.any(e => e.fromNode.key === link.from && e.toNode.key === link.to)).toBeTruthy();
+        expect(diagram.links.any(e => e.fromNode!.key === link.from && e.toNode!.key === link.to)).toBeTruthy();
     });
     diagram.links.each(link => {
         expect(
-            model.linkDataArray.findIndex(e => e.from === link.fromNode.key && e.to === link.toNode.key) >= 0
+            model.linkDataArray.findIndex(e => e.from === link.fromNode!.key && e.to === link.toNode!.key) >= 0
         ).toBeTruthy();
     });
 };
