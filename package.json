@@ -1,6 +1,6 @@
 {
     "name": "react-gojs",
-    "version": "2.1.0",
+    "version": "3.0.0",
     "description": "GoJS React integration",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -28,29 +28,29 @@
     "homepage": "https://github.com/xcomponent/react-gojs#readme",
     "devDependencies": {
         "@types/enzyme": "^3.1.15",
-        "@types/jest": "^23.3.11",
+        "@types/jest": "^23.3.13",
         "@types/node": "^10.12.18",
-        "@types/react": "^16.7.18",
+        "@types/react": "^16.7.20",
         "@types/react-dom": "^16.0.11",
         "coveralls": "^3.0.2",
         "enzyme": "^3.8.0",
-        "enzyme-adapter-react-16": "^1.7.1",
+        "enzyme-adapter-react-16": "^1.8.0",
         "husky": "^1.3.1",
         "jest": "^23.6.0",
         "jest-canvas-mock": "^1.1.0",
         "prettier": "1.16.1",
-        "pretty-quick": "^1.8.0",
+        "pretty-quick": "^1.10.0",
         "react": "16.x",
         "react-dom": "16.x",
         "ts-jest": "23.10.5",
-        "tslint": "^5.12.0",
+        "tslint": "^5.12.1",
         "tslint-config-prettier": "^1.17.0",
         "tslint-plugin-prettier": "^2.0.1",
         "tslint-react": "^3.6.0",
-        "typescript": "^3.2.2"
+        "typescript": "^3.2.4"
     },
     "dependencies": {
-        "gojs": "^1.8.35"
+        "gojs": "^2.0.0"
     },
     "peerDependencies": {
         "react": "16.x",

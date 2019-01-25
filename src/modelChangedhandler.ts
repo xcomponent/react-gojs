@@ -116,9 +116,10 @@ export class GroupNodeModelChangedHandler<N extends BaseNodeModel, L extends Lin
         model: DiagramModel<N, L>,
         diagramNotificationDelegate: DiagramNotificationDelegate<N, L>
     ) {
+        const data = evt.object as N;
         diagramNotificationDelegate.enqueueEvent({
             eventType: ModelChangeEventType.Group,
-            nodeData: { ...evt.object },
+            nodeData: { ...data },
             model: getNewModel(evt)
         });
     }
@@ -156,7 +157,7 @@ export class CommitTransactionHandler<N extends BaseNodeModel, L extends LinkMod
 
 const getNewModel = <N extends BaseNodeModel, L extends LinkModel>(changedEvent: ChangedEvent) => {
     return {
-        nodeDataArray: [...changedEvent.model.nodeDataArray],
+        nodeDataArray: [...changedEvent.model!.nodeDataArray],
         linkDataArray: [...(changedEvent.model as GojsModel).linkDataArray]
     } as DiagramModel<N, L>;
 };
