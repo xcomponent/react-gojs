@@ -40,6 +40,7 @@ To create a GoJS diagram, just use the _GojsDiagram_ React component:
     createDiagram={this.createDiagram}
     className="myDiagram"
     onModelChange={this.modelChangedhandler}
+    updateDiagramProps={this.updateDiagramProps}
 />
 ```
 
@@ -131,6 +132,27 @@ Example:
 
 For example, in a Redux environment, the diagram model should be immutable (and stored in the redux store). The _onModelChange_ handler can dispatch actions to update the model.
 
+-   updateDiagramProps: Method allows to update/modify Diagram properties dynamically once the diagram has been rendered. It gives more control to the user, as it is a user-defined. Method could be kept empty, if nothing to be changed. Need to pass the method as props to the <GojsDiagram />.
+    Basic implementation of the method.
+
+Example 1:
+
+```
+const updateDiagramProps = (myDiagram: Diagram): void => {
+	myDiagram.layout = go.GraphObject.make(go.LayeredDigraphLayout, { direction: 90 });
+
+	// User can add more properties here.
+};
+```
+
+Example 2:
+
+```
+const updateDiagramProps = (myDiagram: Diagram): void => {
+	// Empty method.
+};
+```
+
 ## Examples
 
 -   _Typescript_: You can find a react / redux / react-gojs example + live demo [here](https://github.com/nicolaserny/react-gojs-example).
@@ -157,9 +179,10 @@ yarn test
 
 1.  Fork it!
 2.  Create your feature branch: `git checkout -b my-new-feature`
-3.  Commit your changes: `git commit -am 'Add some feature'`
-4.  Push to the branch: `git push origin my-new-feature`
-5.  Submit a pull request
+3.  Fix lint errors: `yarn lint`
+4.  Commit your changes: `git commit -am 'Add some feature'`
+5.  Push to the branch: `git push origin my-new-feature`
+6.  Submit a pull request
 
 ## License
 
