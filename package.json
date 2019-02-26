@@ -57,7 +57,9 @@
         "react-dom": "16.x"
     },
     "jest": {
-        "setupTestFrameworkScriptFile": "<rootDir>/config/jest/setup.js",
+        "setupFilesAfterEnv": [
+            "<rootDir>/config/jest/setup.js"
+        ],
         "collectCoverageFrom": [
             "src/**/*.{js,jsx,ts,tsx}"
         ],
