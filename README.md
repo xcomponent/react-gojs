@@ -132,7 +132,7 @@ Example:
 
 For example, in a Redux environment, the diagram model should be immutable (and stored in the redux store). The _onModelChange_ handler can dispatch actions to update the model.
 
--   updateDiagramProps: Method allows to update/modify Diagram properties dynamically once the diagram has been rendered. It gives more control to the user, as it is a user-defined. Method could be kept empty, if nothing to be changed. Need to pass the method as props to the <GojsDiagram />.
+-   updateDiagramProps (optional parameter): Method allows to update/modify Diagram properties dynamically once the diagram has been rendered. It gives more control to the user, as it is a user-defined.
     Basic implementation of the method.
 
 Example 1:

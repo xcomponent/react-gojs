@@ -26,7 +26,7 @@ export interface GojsDiagramProps<N extends BaseNodeModel, L extends LinkModel> 
     linkKeyProperty?: string;
     makeUniqueKeyFunction?: () => go.Key;
     makeUniqueLinkKeyFunction?: () => go.Key;
-    updateDiagramProps: (myDiagram: Diagram) => void;
+    updateDiagramProps?: (myDiagram: Diagram) => void;
 }
 
 export interface GojsModel extends go.Model {
@@ -73,7 +73,9 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
         this.applyAddRemoveLinksFromModel();
         this.applyAddRemoveNodesFromModel();
         this.applyUpdatesFromModel();
-        this.props.updateDiagramProps(this.myDiagram);
+        if (this.props.updateDiagramProps) {
+            this.props.updateDiagramProps(this.myDiagram);
+        }
         this.myDiagram.updateAllRelationshipsFromData();
         this.myDiagram.updateAllTargetBindings();
         this.myDiagram.commitTransaction('updated');
