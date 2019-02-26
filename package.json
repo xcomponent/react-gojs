@@ -28,7 +28,7 @@
     "homepage": "https://github.com/xcomponent/react-gojs#readme",
     "devDependencies": {
         "@types/enzyme": "^3.1.15",
-        "@types/jest": "^23.3.13",
+        "@types/jest": "^24.0.0",
         "@types/node": "^10.12.18",
         "@types/react": "^16.7.20",
         "@types/react-dom": "^16.0.11",
@@ -36,7 +36,7 @@
         "enzyme": "^3.8.0",
         "enzyme-adapter-react-16": "^1.8.0",
         "husky": "^1.3.1",
-        "jest": "^23.6.0",
+        "jest": "^24.0.0",
         "jest-canvas-mock": "^1.1.0",
         "prettier": "1.16.4",
         "pretty-quick": "^1.10.0",
