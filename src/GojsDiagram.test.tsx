@@ -115,12 +115,17 @@ describe('<GojsDiagram />', () => {
                 linkKeyProperty="key"
                 makeUniqueLinkKeyFunction={() => {
                     keyIndex++;
-                    console.log(keyIndex);
                     return keyIndex;
                 }}
                 makeUniqueKeyFunction={() => {
                     keyIndex++;
                     return keyIndex;
+                }}
+                copyNodeDataFunction={data => {
+                    keyIndex++;
+                    let newdata = Object.assign({}, data);
+                    newdata.key = keyIndex;
+                    return newdata;
                 }}
             />,
             { attachTo: dom }
@@ -328,6 +333,23 @@ describe('<GojsDiagram />', () => {
         // In this test, makeUniqueLinkKeyFunction is an incremental function,
         // so the key of the new node should be 1
         expect(diagram.links.any(e => e.key === 1 && e.data.color === 'lightblue')).toBeTruthy();
+    });
+
+    it('should use copyNodeDataFunction (if provided) to generate new gojs key', () => {
+        checkIfDiagramRendersModel(model, diagram);
+
+        var node = diagram.model.nodeDataArray.find(n => n.key === 'Alpha');
+        var copiedData;
+        if (node) {
+            diagram.startTransaction();
+            copiedData = diagram.model.copyNodeData(node);
+            diagram.model.addNodeData(copiedData);
+            diagram.commitTransaction();
+        }
+
+        // In this test, copyNodeDataFunction sets the key based on an incremental function,
+        // so the key of the new node should be 1
+        expect(diagram.nodes.any(e => e.key === 1 && e.data.color === 'lightblue')).toBeTruthy();
     });
 });
 

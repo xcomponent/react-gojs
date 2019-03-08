@@ -26,6 +26,7 @@ export interface GojsDiagramProps<N extends BaseNodeModel, L extends LinkModel> 
     linkKeyProperty?: string;
     makeUniqueKeyFunction?: () => go.Key;
     makeUniqueLinkKeyFunction?: () => go.Key;
+    copyNodeDataFunction?: (data: ObjectData, model: go.Model) => ObjectData;
     updateDiagramProps?: (myDiagram: Diagram) => void;
 }
 
@@ -98,7 +99,8 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
             linkDataArray: [...this.props.model.linkDataArray],
             nodeCategoryProperty: this.props.nodeCategoryProperty || 'category',
             linkKeyProperty: this.props.linkKeyProperty || '',
-            makeUniqueLinkKeyFunction: this.props.makeUniqueLinkKeyFunction || null
+            makeUniqueLinkKeyFunction: this.props.makeUniqueLinkKeyFunction || null,
+            copyNodeDataFunction: this.props.copyNodeDataFunction || null
         });
     }
     render() {
