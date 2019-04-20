@@ -28,6 +28,7 @@ export interface GojsDiagramProps<N extends BaseNodeModel, L extends LinkModel> 
     makeUniqueLinkKeyFunction?: () => go.Key;
     copyNodeDataFunction?: (data: ObjectData, model: go.Model) => ObjectData;
     updateDiagramProps?: (myDiagram: Diagram) => void;
+    defaultSelectedNode?: string;
 }
 
 export interface GojsModel extends go.Model {
@@ -82,7 +83,7 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
         this.myDiagram.commitTransaction('updated');
     }
     init() {
-        const { createDiagram, diagramId, onModelChange } = this.props;
+        const { createDiagram, diagramId, onModelChange, defaultSelectedNode } = this.props;
         this.myDiagram = createDiagram(diagramId);
         if (onModelChange) {
             this.myDiagram.addModelChangedListener(this.modelChangedHandler);
@@ -102,6 +103,10 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
             makeUniqueLinkKeyFunction: this.props.makeUniqueLinkKeyFunction || null,
             copyNodeDataFunction: this.props.copyNodeDataFunction || null
         });
+
+        if (defaultSelectedNode) {
+            this.myDiagram.select(this.myDiagram.findNodeForKey(defaultSelectedNode));
+        }
     }
     render() {
         return <div id={this.props.diagramId} className={this.props.className} />;

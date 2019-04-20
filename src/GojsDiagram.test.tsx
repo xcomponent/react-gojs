@@ -88,6 +88,8 @@ describe('<GojsDiagram />', () => {
 
     const myDiagramId = 'myDiagramId';
 
+    const defaultSelectedNodeKey = 'Beta';
+
     let diagram: Diagram;
     let wrapper;
     let modelChangeCallback;
@@ -127,6 +129,7 @@ describe('<GojsDiagram />', () => {
                     newdata.key = keyIndex;
                     return newdata;
                 }}
+                defaultSelectedNode={defaultSelectedNodeKey}
             />,
             { attachTo: dom }
         );
