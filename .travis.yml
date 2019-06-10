@@ -2,6 +2,7 @@ language: node_js
 node_js:
     - '8'
     - '10'
+    - '12'
 sudo: false
 os:
     - linux
@@ -21,8 +22,7 @@ deploy:
       email: dev@xcomponent.com
       skip_cleanup: true
       api_key:
-          secure:
-              i4ry9c7JhC30AP39/zTE7DCZHfL22kgMUJs+zduU2TMPKapmkaMRbKKM+xoLOQVoWw1KNchjXUcNT1x8NPar3Yv5qwkqJfp2zNfVuQX329FK0MMgU++j816JkWGIInNW03m/hNPlsAlsEX+BaNq1jl9DhLmVCG9OczInfCUDayfYhrdpw1GR/jbaXJs1wEob/Mvv9gfLKwpTB1oS5lse8SQXP/d4ZibOzJzI4GD6HL6svdCMFxazSAQgmk+n4rneZ7iOAsvlryzOFwY2RkjabEaWocwk1KPDHRBhAirO/ukEQvTFBVLLxr+LygvXbdLXFQjvwo/1hyFtgo2GtB9tzUBFSDjm2rzwYfc+O81+9g9pQBdGQMsNLxM4HCL43etAl+SYDgfpeQ5m2a6wG3pmCTWdjSJILkX9B12+Jhk/aG35EN7YPdfqPiI+qUlurKX5LKxOUlNsbnFb05q45mC/jgeP2C04nbd49SfE12Br8DT7+cy0nRGgOHqf+lZ4mkPcMhbPyNJWyIApsPJuyHqvGqochJPVWrBN6BzHpsa1Rt3uYllnZpg4ANMaUR6zKnV3SY/x5heo/urlCeseHO4U75gNAQSAuVM4pkPhF7MjOwb0MM77wsTl2oVOqDlU4d3Lrp+ZvLCOn0437OtLAfz5l4eQaxQfKJ+VMsUx222xk9Y=
+          secure: i4ry9c7JhC30AP39/zTE7DCZHfL22kgMUJs+zduU2TMPKapmkaMRbKKM+xoLOQVoWw1KNchjXUcNT1x8NPar3Yv5qwkqJfp2zNfVuQX329FK0MMgU++j816JkWGIInNW03m/hNPlsAlsEX+BaNq1jl9DhLmVCG9OczInfCUDayfYhrdpw1GR/jbaXJs1wEob/Mvv9gfLKwpTB1oS5lse8SQXP/d4ZibOzJzI4GD6HL6svdCMFxazSAQgmk+n4rneZ7iOAsvlryzOFwY2RkjabEaWocwk1KPDHRBhAirO/ukEQvTFBVLLxr+LygvXbdLXFQjvwo/1hyFtgo2GtB9tzUBFSDjm2rzwYfc+O81+9g9pQBdGQMsNLxM4HCL43etAl+SYDgfpeQ5m2a6wG3pmCTWdjSJILkX9B12+Jhk/aG35EN7YPdfqPiI+qUlurKX5LKxOUlNsbnFb05q45mC/jgeP2C04nbd49SfE12Br8DT7+cy0nRGgOHqf+lZ4mkPcMhbPyNJWyIApsPJuyHqvGqochJPVWrBN6BzHpsa1Rt3uYllnZpg4ANMaUR6zKnV3SY/x5heo/urlCeseHO4U75gNAQSAuVM4pkPhF7MjOwb0MM77wsTl2oVOqDlU4d3Lrp+ZvLCOn0437OtLAfz5l4eQaxQfKJ+VMsUx222xk9Y=
       on:
           tags: true
-          node: '10'
+          node: '12'
