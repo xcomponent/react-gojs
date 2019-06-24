@@ -193,6 +193,22 @@ describe('<GojsDiagram />', () => {
         {
             updatedModel: {
                 ...model,
+                linkDataArray: [
+                    ...model.linkDataArray,
+                    {
+                        from: 'Gamma',
+                        to: 'Omega',
+                        fromPort: portFrom,
+                        toPort: portTo,
+                        key: -5
+                    }
+                ]
+            },
+            description: 'adding two new links between same nodes'
+        },
+        {
+            updatedModel: {
+                ...model,
                 nodeDataArray: [
                     { key: 'Alpha', color: 'lightblue' },
                     { key: 'Beta', color: 'blue' },
@@ -366,6 +382,7 @@ const checkIfDiagramRendersModel = (model, diagram: Diagram) => {
     });
     model.linkDataArray.forEach(link => {
         expect(diagram.links.any(e => e.fromNode!.key === link.from && e.toNode!.key === link.to)).toBeTruthy();
+        expect(model.linkDataArray.length === diagram.links.count).toBeTruthy();
     });
     diagram.links.each(link => {
         expect(

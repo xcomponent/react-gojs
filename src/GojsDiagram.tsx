@@ -148,15 +148,35 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
         const linksToAdd = this.props.model.linkDataArray
             .filter(
                 e =>
-                    (this.myDiagram.model as GojsModel).linkDataArray.findIndex(
-                        (el: LinkModel) => el.from === e.from && el.to === e.to
-                    ) === -1
+                    (this.myDiagram.model as GojsModel).linkDataArray.findIndex((el: LinkModel) => {
+                        if (
+                            this.props.linkKeyProperty &&
+                            el[this.props.linkKeyProperty] &&
+                            e[this.props.linkKeyProperty]
+                        ) {
+                            return (
+                                el.from === e.from &&
+                                el.to === e.to &&
+                                el[this.props.linkKeyProperty] === e[this.props.linkKeyProperty]
+                            );
+                        }
+                        return el.from === e.from && el.to === e.to;
+                    }) === -1
             )
             .map(link => Object.assign({}, link));
         (this.myDiagram.model as GojsModel).addLinkDataCollection(linksToAdd);
         const linksToRemove = (this.myDiagram.model as GojsModel).linkDataArray.filter(
             (e: LinkModel) =>
-                this.props.model.linkDataArray.findIndex(el => el.from === e.from && el.to === e.to) === -1
+                this.props.model.linkDataArray.findIndex(el => {
+                    if (this.props.linkKeyProperty && el[this.props.linkKeyProperty] && e[this.props.linkKeyProperty]) {
+                        return (
+                            el.from === e.from &&
+                            el.to === e.to &&
+                            el[this.props.linkKeyProperty] === e[this.props.linkKeyProperty]
+                        );
+                    }
+                    return el.from === e.from && el.to === e.to;
+                }) === -1
         );
         (this.myDiagram.model as GojsModel).removeLinkDataCollection(linksToRemove);
     }
