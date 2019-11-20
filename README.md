@@ -9,6 +9,8 @@
 
 _react-gojs_ is a [GoJS](https://gojs.net/latest/index.html) React integration.
 
+:warning: **react-gojs is no longer under active development**. Now, Northwoods provides an official React integration for GoJS: [https://github.com/NorthwoodsSoftware/gojs-react](https://github.com/NorthwoodsSoftware/gojs-react). I will not add new features to this lib, only bug fixes. The migration to the official library is pretty easy. I migrated my example [here](https://github.com/nicolaserny/gojs-react-example).
+
 ## Install
 
 Install it from npm. It has peer dependencies of react and react-dom, which will have to be installed as well.
