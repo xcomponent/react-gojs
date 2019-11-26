@@ -1,3 +1,6 @@
+:warning: **react-gojs is no longer under active development**. Now, Northwoods provides an official React integration for GoJS: [https://github.com/NorthwoodsSoftware/gojs-react](https://github.com/NorthwoodsSoftware/gojs-react). I will not add new features to this lib, only bug fixes. The migration to the official library is pretty easy. I migrated my example [here](https://github.com/nicolaserny/gojs-react-example).
+
+
 [![](http://slack.xcomponent.com/badge.svg)](http://slack.xcomponent.com/)
 [![NpmVersion](https://img.shields.io/npm/v/react-gojs.svg)](https://www.npmjs.com/package/react-gojs)
 [![npm](https://img.shields.io/npm/dt/react-gojs.svg)](https://www.npmjs.com/package/react-gojs)
@@ -8,8 +11,6 @@
 # react-gojs
 
 _react-gojs_ is a [GoJS](https://gojs.net/latest/index.html) React integration.
-
-:warning: **react-gojs is no longer under active development**. Now, Northwoods provides an official React integration for GoJS: [https://github.com/NorthwoodsSoftware/gojs-react](https://github.com/NorthwoodsSoftware/gojs-react). I will not add new features to this lib, only bug fixes. The migration to the official library is pretty easy. I migrated my example [here](https://github.com/nicolaserny/gojs-react-example).
 
 ## Install
 
