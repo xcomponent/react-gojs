@@ -42,6 +42,10 @@ export interface GojsModel extends go.Model {
 class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.PureComponent<GojsDiagramProps<N, L>>
     implements DiagramNotificationDelegate<N, L> {
     private myDiagram: Diagram;
+    private divRef: React.RefObject<HTMLDivElement>;
+
+    private mountInterval;
+
     private eventsToDispatch: ModelChangeEvent<N, L>[];
     private modelChangedHandlers = [
         new AddNodeModelChangedHandler<N, L>(),
@@ -55,19 +59,36 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
 
     constructor(props: GojsDiagramProps<N, L>) {
         super(props);
+        this.divRef = React.createRef();
         this.eventsToDispatch = [];
         this.modelChangedHandler = this.modelChangedHandler.bind(this);
     }
 
     componentDidMount() {
-        this.init();
+        let intervalCount = 0;
+        this.mountInterval = setInterval(() => {
+            if (this.divRef.current && this.divRef.current.clientWidth && this.divRef.current.clientHeight) {
+                this.init();
+                clearInterval(this.mountInterval);
+            } else {
+                if (intervalCount > 10) {
+                    clearInterval(this.mountInterval);
+                }
+                intervalCount++;
+            }
+        }, 10);
     }
 
     componentWillUnmount() {
-        if (this.props.onModelChange) {
+        if (this.myDiagram && this.props.onModelChange) {
             this.myDiagram.removeModelChangedListener(this.modelChangedHandler);
         }
-        this.myDiagram.clear();
+        if (this.myDiagram) {
+            this.myDiagram.clear();
+        }
+        if (this.mountInterval) {
+            clearInterval(this.mountInterval);
+        }
     }
 
     componentDidUpdate() {
@@ -109,7 +130,7 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
         }
     }
     render() {
-        return <div id={this.props.diagramId} className={this.props.className} />;
+        return <div ref={this.divRef} id={this.props.diagramId} className={this.props.className} />;
     }
 
     enqueueEvent(event: ModelChangeEvent<N, L>) {

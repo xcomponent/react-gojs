@@ -7,7 +7,7 @@ import { ModelChangeEventType } from './modelChangeEvent';
 
 const groupName = 'myGroup';
 const singleNode = 'singleNode';
-
+jest.useFakeTimers();
 describe('<GojsDiagram />', () => {
     const portFrom = 'R';
     const portTo = 'L';
@@ -96,6 +96,8 @@ describe('<GojsDiagram />', () => {
     let keyIndex = 0;
 
     beforeEach(() => {
+        Object.defineProperty(Element.prototype, 'clientWidth', { value: 100 });
+        Object.defineProperty(Element.prototype, 'clientHeight', { value: 100 });
         keyIndex = 0;
         const dom = document.body;
         modelChangeCallback = jest.fn();
@@ -133,6 +135,7 @@ describe('<GojsDiagram />', () => {
             />,
             { attachTo: dom }
         );
+        jest.runAllTimers();
     });
 
     it('should default to "category" for nodeCategoryProperty', () => {
@@ -223,9 +226,7 @@ describe('<GojsDiagram />', () => {
 
     testCases.forEach(test => {
         // tslint:disable-next-line:max-line-length
-        it(`should update the render of the diagram (nodes and links) based on the new model provided as prop - case: ${
-            test.description
-        }`, () => {
+        it(`should update the render of the diagram (nodes and links) based on the new model provided as prop - case: ${test.description}`, () => {
             checkIfDiagramRendersModel(model, diagram);
             wrapper.setProps({ model: test.updatedModel });
             checkIfDiagramRendersModel(test.updatedModel, diagram);
