@@ -92,16 +92,18 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
     }
 
     componentDidUpdate() {
-        this.myDiagram.startTransaction();
-        this.applyAddRemoveLinksFromModel();
-        this.applyAddRemoveNodesFromModel();
-        this.applyUpdatesFromModel();
-        if (this.props.updateDiagramProps) {
-            this.props.updateDiagramProps(this.myDiagram);
+        if (this.myDiagram) {
+            this.myDiagram.startTransaction();
+            this.applyAddRemoveLinksFromModel();
+            this.applyAddRemoveNodesFromModel();
+            this.applyUpdatesFromModel();
+            if (this.props.updateDiagramProps) {
+                this.props.updateDiagramProps(this.myDiagram);
+            }
+            this.myDiagram.updateAllRelationshipsFromData();
+            this.myDiagram.updateAllTargetBindings();
+            this.myDiagram.commitTransaction('updated');
         }
-        this.myDiagram.updateAllRelationshipsFromData();
-        this.myDiagram.updateAllTargetBindings();
-        this.myDiagram.commitTransaction('updated');
     }
     init() {
         const { createDiagram, diagramId, onModelChange, defaultSelectedNode } = this.props;
