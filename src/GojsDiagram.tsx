@@ -65,18 +65,22 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
     }
 
     componentDidMount() {
-        let intervalCount = 0;
-        this.mountInterval = setInterval(() => {
-            if (this.divRef.current && this.divRef.current.clientWidth && this.divRef.current.clientHeight) {
-                this.init();
-                clearInterval(this.mountInterval);
-            } else {
-                if (intervalCount > 10) {
+        if (this.divRef.current) {
+            let prevValue = JSON.stringify(this.divRef.current.getBoundingClientRect());
+            this.mountInterval = setInterval(() => {
+                if (this.divRef.current) {
+                    let nextValue = JSON.stringify(this.divRef.current.getBoundingClientRect());
+                    if (nextValue === prevValue) {
+                        clearInterval(this.mountInterval);
+                        this.init();
+                    } else {
+                        prevValue = nextValue;
+                    }
+                } else {
                     clearInterval(this.mountInterval);
                 }
-                intervalCount++;
-            }
-        }, 10);
+            }, 50);
+        }
     }
 
     componentWillUnmount() {
