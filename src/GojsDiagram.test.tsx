@@ -96,8 +96,19 @@ describe('<GojsDiagram />', () => {
     let keyIndex = 0;
 
     beforeEach(() => {
-        Object.defineProperty(Element.prototype, 'clientWidth', { value: 100 });
-        Object.defineProperty(Element.prototype, 'clientHeight', { value: 100 });
+        Element.prototype.getBoundingClientRect = function() {
+            return {
+                width: 100,
+                height: 100,
+                top: 0,
+                left: 0,
+                x: 0,
+                y: 0,
+                toJSON: null,
+                bottom: 0,
+                right: 0
+            };
+        };
         keyIndex = 0;
         const dom = document.body;
         modelChangeCallback = jest.fn();
