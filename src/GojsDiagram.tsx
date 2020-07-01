@@ -70,7 +70,11 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
             this.mountInterval = setInterval(() => {
                 if (this.divRef.current) {
                     let nextValue = JSON.stringify(this.divRef.current.getBoundingClientRect());
-                    if (nextValue === prevValue) {
+                    if (
+                        nextValue === prevValue &&
+                        this.divRef.current.getBoundingClientRect().height &&
+                        this.divRef.current.getBoundingClientRect().width
+                    ) {
                         clearInterval(this.mountInterval);
                         this.init();
                     } else {
