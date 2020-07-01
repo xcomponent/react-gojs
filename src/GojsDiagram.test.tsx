@@ -104,7 +104,9 @@ describe('<GojsDiagram />', () => {
                 left: 0,
                 x: 0,
                 y: 0,
-                toJSON: null,
+                toJSON: () => {
+                    console.log('test');
+                },
                 bottom: 0,
                 right: 0
             };
