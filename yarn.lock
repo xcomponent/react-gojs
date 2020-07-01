@@ -1534,10 +1534,10 @@ globals@^11.1.0:
   version "11.11.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-11.11.0.tgz#dcf93757fa2de5486fbeed7118538adf789e9c2e"
 
-gojs@^2.0.18:
-  version "2.1.19"
-  resolved "https://registry.yarnpkg.com/gojs/-/gojs-2.1.19.tgz#b0a929d1774b02b2dc4ca9188ad2dbbbf0fa6706"
-  integrity sha512-K2sJlmNdU5PacFQTPK4QMMaxjl+MSNlM3Nr5Okh7cI37EAFHZ/XVccNojYOV6v7Q9RSDDGFZbExfgniqS5kTww==
+gojs@2.0.18:
+  version "2.0.18"
+  resolved "https://registry.yarnpkg.com/gojs/-/gojs-2.0.18.tgz#160d0e79b727cf70f1039b827a09cc602294dc55"
+  integrity sha512-3IB/HPJvPrbwkQrzMevCkVnzR8wKE0c7CrKCBHlr8CLQKV5m2yy3OiHavpWgkM59jIKCc8Kboi9ETUMgjGfZSA==
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2:
   version "4.1.15"
