@@ -1,6 +1,18 @@
 import * as React from 'react';
-import * as go from 'gojs';
-import { Diagram } from 'gojs';
+import {
+    Diagram,
+    GraphObject,
+    Spot,
+    Node,
+    Shape,
+    TextBlock,
+    Group,
+    Panel,
+    Binding,
+    Placeholder,
+    Size,
+    LayeredDigraphLayout
+} from 'gojs';
 import { mount } from 'enzyme';
 import GojsDiagram, { GojsModel } from './GojsDiagram';
 import { ModelChangeEventType } from './modelChangeEvent';
@@ -30,44 +42,44 @@ describe('<GojsDiagram />', () => {
     };
 
     const createDiagram = (diagramId: string): Diagram => {
-        const $ = go.GraphObject.make;
+        const $ = GraphObject.make;
 
-        const myDiagram: Diagram = $(go.Diagram, diagramId, {
-            initialContentAlignment: go.Spot.LeftCenter
+        const myDiagram: Diagram = $(Diagram, diagramId, {
+            initialContentAlignment: Spot.LeftCenter
         });
 
         myDiagram.nodeTemplate = $(
-            go.Node,
+            Node,
             'Auto',
-            $(go.Shape, 'RoundedRectangle', { strokeWidth: 0 }, new go.Binding('fill', 'color')),
-            $(go.TextBlock, { margin: 8 }, new go.Binding('text', 'key')),
-            makePort(portTo, go.Spot.LeftCenter, false, true),
-            makePort(portFrom, go.Spot.RightCenter, true, false)
+            $(Shape, 'RoundedRectangle', { strokeWidth: 0 }, new Binding('fill', 'color')),
+            $(TextBlock, { margin: 8 }, new Binding('text', 'key')),
+            makePort(portTo, Spot.LeftCenter, false, true),
+            makePort(portFrom, Spot.RightCenter, true, false)
         );
 
         myDiagram.groupTemplate = $(
-            go.Group,
+            Group,
             'Vertical',
             $(
-                go.Panel,
+                Panel,
                 'Auto',
-                $(go.Shape, 'RoundedRectangle', {
+                $(Shape, 'RoundedRectangle', {
                     parameter1: 14,
                     fill: 'rgba(128,128,128,0.33)'
                 }),
-                $(go.Placeholder, { padding: 5 })
+                $(Placeholder, { padding: 5 })
             ),
-            $(go.TextBlock, { alignment: go.Spot.Right, font: 'Bold 12pt Sans-Serif' }, new go.Binding('text', 'key'))
+            $(TextBlock, { alignment: Spot.Right, font: 'Bold 12pt Sans-Serif' }, new Binding('text', 'key'))
         );
 
         return myDiagram;
     };
 
-    const makePort = (name: string, spot: go.Spot, isOutput: boolean, isInput: boolean) => {
-        const $ = go.GraphObject.make;
-        return $(go.Shape, 'Circle', {
+    const makePort = (name: string, spot: Spot, isOutput: boolean, isInput: boolean) => {
+        const $ = GraphObject.make;
+        return $(Shape, 'Circle', {
             fill: 'black',
-            desiredSize: new go.Size(8, 8),
+            desiredSize: new Size(8, 8),
             alignment: spot,
             alignmentFocus: spot,
             fromSpot: spot,
@@ -83,7 +95,7 @@ describe('<GojsDiagram />', () => {
 
     const updateDiagramProps = (myDiagram: Diagram): void => {
         // The function could kept empty or we can add diagram properties that we wish to change. The reason to make this function user defined is to give more customization options to user. And also, its bit difficult to cover all the use cases of the charting library.
-        myDiagram.layout = go.GraphObject.make(go.LayeredDigraphLayout, { direction: 90 });
+        myDiagram.layout = GraphObject.make(LayeredDigraphLayout, { direction: 90 });
     };
 
     const myDiagramId = 'myDiagramId';

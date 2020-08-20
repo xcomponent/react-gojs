@@ -1,6 +1,5 @@
 import * as React from 'react';
-import * as go from 'gojs';
-import { Diagram, ChangedEvent, ObjectData } from 'gojs';
+import { Diagram, ChangedEvent, ObjectData, Key, Model, GraphObject, GraphLinksModel } from 'gojs';
 import { DiagramModel, BaseNodeModel, LinkModel } from './model';
 import { ModelChangeEvent } from './modelChangeEvent';
 import {
@@ -24,14 +23,14 @@ export interface GojsDiagramProps<N extends BaseNodeModel, L extends LinkModel> 
     linkToPortIdProperty?: string;
     nodeCategoryProperty?: string;
     linkKeyProperty?: string;
-    makeUniqueKeyFunction?: () => go.Key;
-    makeUniqueLinkKeyFunction?: () => go.Key;
-    copyNodeDataFunction?: (data: ObjectData, model: go.Model) => ObjectData;
+    makeUniqueKeyFunction?: () => Key;
+    makeUniqueLinkKeyFunction?: () => Key;
+    copyNodeDataFunction?: (data: ObjectData, model: Model) => ObjectData;
     updateDiagramProps?: (myDiagram: Diagram) => void;
     defaultSelectedNode?: string;
 }
 
-export interface GojsModel extends go.Model {
+export interface GojsModel extends Model {
     linkDataArray: ObjectData[];
     addLinkDataCollection: (links: ObjectData[]) => void;
     removeLinkDataCollection: (links: ObjectData[]) => void;
@@ -120,7 +119,7 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
             this.myDiagram.addModelChangedListener(this.modelChangedHandler);
         }
 
-        this.myDiagram.model = go.GraphObject.make(go.GraphLinksModel, {
+        this.myDiagram.model = GraphObject.make(GraphLinksModel, {
             ...(this.props.makeUniqueKeyFunction && {
                 makeUniqueKeyFunction: this.props.makeUniqueKeyFunction
             }),
@@ -214,7 +213,7 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
 
     private applyUpdatesFromModel() {
         this.myDiagram.model.applyIncrementalJson({
-            class: 'go.GraphLinksModel',
+            class: 'GraphLinksModel',
             incremental: 1,
             nodeKeyProperty: 'key',
             linkKeyProperty: 'key',
