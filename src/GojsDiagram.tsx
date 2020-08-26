@@ -15,6 +15,7 @@ import {
 
 export interface GojsDiagramProps<N extends BaseNodeModel, L extends LinkModel> {
     model: DiagramModel<N, L>;
+    initialModelData?: ObjectData;
     createDiagram: (id: string) => Diagram;
     diagramId: string;
     className: string;
@@ -131,7 +132,8 @@ class GojsDiagram<N extends BaseNodeModel, L extends LinkModel> extends React.Pu
             nodeCategoryProperty: this.props.nodeCategoryProperty || 'category',
             linkKeyProperty: this.props.linkKeyProperty || '',
             makeUniqueLinkKeyFunction: this.props.makeUniqueLinkKeyFunction || null,
-            copyNodeDataFunction: this.props.copyNodeDataFunction || null
+            copyNodeDataFunction: this.props.copyNodeDataFunction || null,
+            ...(this.props.initialModelData && { modelData: this.props.initialModelData })
         });
 
         if (defaultSelectedNode) {

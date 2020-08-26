@@ -99,6 +99,7 @@ describe('<GojsDiagram />', () => {
     };
 
     const myDiagramId = 'myDiagramId';
+    const modelData = { test: 'modeldatata' };
 
     const defaultSelectedNodeKey = 'Beta';
 
@@ -106,6 +107,10 @@ describe('<GojsDiagram />', () => {
     let wrapper;
     let modelChangeCallback;
     let keyIndex = 0;
+
+    const dom = document.body;
+    const rootDiv = document.createElement('div');
+    dom.appendChild(rootDiv);
 
     beforeEach(() => {
         Element.prototype.getBoundingClientRect = function() {
@@ -116,20 +121,18 @@ describe('<GojsDiagram />', () => {
                 left: 0,
                 x: 0,
                 y: 0,
-                toJSON: () => {
-                    console.log('test');
-                },
+                toJSON: () => '',
                 bottom: 0,
                 right: 0
             };
         };
         keyIndex = 0;
-        const dom = document.body;
         modelChangeCallback = jest.fn();
         wrapper = mount(
             <GojsDiagram
                 diagramId={myDiagramId}
                 model={model}
+                initialModelData={modelData}
                 createDiagram={id => {
                     diagram = createDiagram(myDiagramId);
                     return diagram;
@@ -158,13 +161,17 @@ describe('<GojsDiagram />', () => {
                 }}
                 defaultSelectedNode={defaultSelectedNodeKey}
             />,
-            { attachTo: dom }
+            { attachTo: rootDiv }
         );
         jest.runAllTimers();
     });
 
     it('should default to "category" for nodeCategoryProperty', () => {
         expect(diagram.model.nodeCategoryProperty === 'category').toBeTruthy();
+    });
+
+    it('should initialize the modelData', () => {
+        expect(diagram.model.modelData).toBe(modelData);
     });
 
     it('should render links and nodes in the diagram based on the model provided as prop', () => {
